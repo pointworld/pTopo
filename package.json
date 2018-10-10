@@ -1,6 +1,6 @@
 {
-  "name": "pw-jtopo",
-  "version": "1.0.0",
+  "name": "pw-topo",
+  "version": "0.0.0",
   "description": "a topo frame based on canvas",
   "main": "index.js",
   "scripts": {

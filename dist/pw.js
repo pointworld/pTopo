@@ -1,5 +1,5 @@
 /*!
- * Pw.js v1.0.0
+ * Pw.js v0.0.0
  * (c) 2018-2018 Point
  * Released under the MIT License.
  */
@@ -4857,7 +4857,7 @@
     return Scene;
   }(Element);
 
-  var version = "1.0.0";
+  var version = "0.0.0";
 
   var Stage =
   /*#__PURE__*/
