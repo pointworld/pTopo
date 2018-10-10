@@ -1,5 +1,5 @@
 {
-  "name": "pTopo",
+  "name": "ptopo",
   "version": "0.0.5",
   "description": "a topo frame based on canvas",
   "main": "dist/pTopo.js",
@@ -20,7 +20,7 @@
   "keywords": [
     "topo",
     "canvas",
-    "pTopo"
+    "ptopo"
   ],
   "author": "point <https://github.com/pointworld/>",
   "license": "MIT",
