@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>matrix</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,12 +20,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene()
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene()
 
   scene.background = './img/bg.jpg'
 
@@ -40,7 +40,7 @@
   const icons = ['green', 'blue', 'gray']
 
   function node(x, y) {
-    const node = new Pw.Node(randomIP())
+    const node = new PTopo.Node(randomIP())
     node.setImage('./img/p.png', true)
     node.setLocation(x, y)
     scene.add(node)
@@ -52,7 +52,7 @@
   }
 
   function linkNode(nodeA, nodeZ) {
-    const link = new Pw.Link(nodeA, nodeZ)
+    const link = new PTopo.Link(nodeA, nodeZ)
     link.strokeColor = '204,204,204'
     link.lineWidth = 1
     scene.add(link)

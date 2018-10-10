@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>tree layout</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,18 +20,18 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene()
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene()
 
   stage.add(scene)
 
   scene.background = './img/bg.jpg'
 
-  const cloudNode = new Pw.Node('root')
+  const cloudNode = new PTopo.Node('root')
   cloudNode.setSize(30, 26)
   cloudNode.setLocation(360, 130)
   cloudNode.layout = {type: 'tree', width: 180, height: 100}
@@ -39,30 +39,30 @@
   scene.add(cloudNode)
 
   for (let i = 1; i < 4; i++) {
-    const node = new Pw.CircleNode('host' + i)
+    const node = new PTopo.CircleNode('host' + i)
     node.fillStyle = '200,255,0'
     node.radius = 15
     node.setLocation(scene.width * Math.random(), scene.height * Math.random())
     node.layout = {type: 'tree', width: 50, height: 100}
 
     scene.add(node)
-    const link = new Pw.Link(cloudNode, node)
+    const link = new PTopo.Link(cloudNode, node)
     scene.add(link)
 
     for (let j = 0; j < 4; j++) {
-      const vmNode = new Pw.CircleNode('vm-' + i + '-' + j)
+      const vmNode = new PTopo.CircleNode('vm-' + i + '-' + j)
       vmNode.radius = 10
       vmNode.fillStyle = '255,255,0'
       vmNode.setLocation(scene.width * Math.random(), scene.height * Math.random())
       scene.add(vmNode)
-      scene.add(new Pw.Link(node, vmNode))
+      scene.add(new PTopo.Link(node, vmNode))
     }
   }
-  Pw.Layout.layoutNode(scene, cloudNode, true)
+  PTopo.Layout.layoutNode(scene, cloudNode, true)
 
   scene.addEventListener('mouseup', function (e) {
     if (e.target && e.target.layout) {
-      Pw.Layout.layoutNode(scene, e.target, true)
+      PTopo.Layout.layoutNode(scene, e.target, true)
     }
   })
 

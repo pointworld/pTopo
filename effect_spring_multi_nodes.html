@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>multi-nodes spring effect</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -19,12 +19,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene()
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene()
 
   scene.shadow = true
   scene.background = './img/bg.jpg'
@@ -35,9 +35,9 @@
   for (let i = 0; i < 9; i++) {
     const x = Math.ceil(Math.random() * 600)
     const y = Math.ceil(Math.random() * 400)
-    const node = new Pw.CircleNode()
+    const node = new PTopo.CircleNode()
     node.radius = 25
-    node.fillColor  = Pw.util.randomColor()
+    node.fillColor  = PTopo.util.randomColor()
     node.setLocation(x, y)
     scene.add(node)
     nodes.push(node)
@@ -45,22 +45,22 @@
 
   const links = []
   for (let i = 1; i < nodes.length; i++) {
-    const link = new Pw.Link(nodes[i - 1], nodes[i])
-    link.strokeColor = Pw.util.randomColor()
+    const link = new PTopo.Link(nodes[i - 1], nodes[i])
+    link.strokeColor = PTopo.util.randomColor()
     link.lineWidth = Math.ceil(15 * Math.random()) + 1
     scene.add(link)
     links.push(link)
   }
 
   // link first and last
-  const link = new Pw.Link(nodes[nodes.length - 1], nodes[0])
-  link.strokeColor = Pw.util.randomColor()
+  const link = new PTopo.Link(nodes[nodes.length - 1], nodes[0])
+  link.strokeColor = PTopo.util.randomColor()
   link.lineWidth = Math.ceil(15 * Math.random()) + 1
   scene.add(link)
   links.push(link)
 
   // define effect
-  const effect = new Pw.Effect()
+  const effect = new PTopo.Effect()
     .spring({
       minLength: 200
     })
@@ -73,7 +73,7 @@
   }
 
   // play
-  effect.play(1000)
+  effect.play()
 
 </script>
 </body>

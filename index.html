@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>topo demo</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -114,12 +114,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene()
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene()
 
   scene.shadow = true
   scene.backgroundColor = 'rgba(0,0,0,.5)'
@@ -132,12 +132,12 @@
   function create_node() {
     const x = Math.random() * stage.width
     const y = Math.random() * stage.height
-    const node = new Pw.CircleNode()
+    const node = new PTopo.CircleNode()
     node.vx = Math.random() * 6 - 3
     node.vy = Math.random() * 6 - 3
     node.radius = Math.random() * 10 + 2
     node.mass = node.radius
-    node.fillColor = Pw.util.randomColor()
+    node.fillColor = PTopo.util.randomColor()
     node.alpha = .5
     node.setLocation(x, y)
     scene.add(node)
@@ -165,7 +165,7 @@
     const dx = b.x - a.x
     const dy = b.y - a.y
 
-    const dist = Pw.util.getDistance(a, b)
+    const dist = PTopo.util.getDistance(a, b)
 
     if (dist < minDist) {
       const g = stage.graphics

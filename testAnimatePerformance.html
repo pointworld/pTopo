@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>test animate performance</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,12 +20,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
 
   scene.background = './img/bg.jpg'
 
@@ -36,7 +36,7 @@
   }
 
   function createNode(x, y, text) {
-    const node = new Pw.Node()
+    const node = new PTopo.Node()
 
     node.radius = 4
     node.showSelected = false
@@ -52,7 +52,7 @@
       if (Math.random() < .3) {
         node.setImage('./img/logo.png')
       }
-      new Pw.Animate()
+      new PTopo.Animate()
         .stepByStep(node, {
           alpha: .1,
           rotate: (Math.random() - Math.random()) * 2 * Math.PI,

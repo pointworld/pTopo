@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>animate</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,12 +20,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
 
   stage.frame = 24
   scene.background = './img/bg.jpg'
@@ -41,20 +41,20 @@
   ]
 
   for (let i = 0; i < animates.length; i++) {
-    const node = new Pw.Node('node')
+    const node = new PTopo.Node('node')
 
     node.setCenterLocation(100 + i * 90, 300)
-    node.fillColor = Pw.util.randomColor()
+    node.fillColor = PTopo.util.randomColor()
 
     scene.add(node)
 
-    new Pw.Animate()
+    new PTopo.Animate()
       .stepByStep(node, animates[i], 3000, true)
       .start()
   }
 
   function myNode(text, x, y) {
-    const node = new Pw.Node(text)
+    const node = new PTopo.Node(text)
 
     node.percent = .8
     node.beginDegree = 0
@@ -86,7 +86,7 @@
   const node1 = myNode('self-defined', 355, 151)
 
   node1.percent = .1
-  new Pw.Animate()
+  new PTopo.Animate()
     .stepByStep(node1, {
       percent: 1
     }, 5000, true)
@@ -94,7 +94,7 @@
 
   const node2 = myNode('self-defined', 155, 151)
 
-  new Pw.Animate()
+  new PTopo.Animate()
     .stepByStep(node2, {
       beginDegree: 2 * Math.PI
     }, 3000, true)

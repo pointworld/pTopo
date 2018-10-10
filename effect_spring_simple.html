@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>simple spring effect</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -19,21 +19,21 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene()
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene()
   stage.frames = 24
 
   scene.background = './img/bg.jpg'
   stage.add(scene)
 
   function create_node(x, y, name) {
-    const node = new Pw.CircleNode(name)
+    const node = new PTopo.CircleNode(name)
     node.radius = 20
-    node.fillColor = Pw.util.randomColor()
+    node.fillColor = PTopo.util.randomColor()
     node.setLocation(x, y)
     scene.add(node)
     return node
@@ -44,10 +44,10 @@
   const node = create_node(400, 200, 'node')
 
   // link
-  scene.add(new Pw.Link(targetNode, node))
+  scene.add(new PTopo.Link(targetNode, node))
 
   // spring effect (gravity, friction)
-  const effect = new Pw.Effect()
+  const effect = new PTopo.Effect()
     .spring({
       grivity: 10
     })
@@ -56,7 +56,7 @@
   effect.addNode(node, targetNode)
 
   // play
-  effect.play(1000)
+  effect.play()
 
 </script>
 </body>

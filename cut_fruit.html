@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>cut fruit</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -19,8 +19,8 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
   // 最高分记录
@@ -38,8 +38,8 @@
     localStorage.setItem('best', newBest)
   }
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
 
   scene.background = './img/bg.jpg'
   scene.mode = 'select'
@@ -59,7 +59,7 @@
 
     var nodes = []
     for (var i = 0; i < 3; i++) {
-      var node = new Pw.Node()
+      var node = new PTopo.Node()
       node.setImage('./img/black.png', true)
       node.showSelected = false
       node.isFruit = true
@@ -70,13 +70,13 @@
     var score = 0
 
     var scoreIcon = iconNode('score.png', 10, 10)
-    var scoreNode = new Pw.TextNode('0')
+    var scoreNode = new PTopo.TextNode('0')
     scoreNode.font = '18px'
     scoreNode.strokeColor = '255,255,0'
     scoreNode.setLocation(60, 24)
     scene.add(scoreNode)
 
-    var bestScoreNode = new Pw.TextNode('Best :' + getBestScore())
+    var bestScoreNode = new PTopo.TextNode('Best :' + getBestScore())
     bestScoreNode.fontSize = '18px'
     bestScoreNode.strokeColor = '255,255,0'
     bestScoreNode.setLocation(10, 60)
@@ -84,7 +84,7 @@
 
     var lose = 0
     var loseIcon = iconNode('lose.png', 530, 10)
-    var loseNode = new Pw.TextNode('0')
+    var loseNode = new PTopo.TextNode('0')
     loseNode.fontSize = '18pt'
     loseNode.strokeColor = '255,255,0'
     loseNode.setLocation(590, 22)
@@ -97,10 +97,10 @@
       if (isGameOver) return
       if (isBoom(node)) {
         isGameOver = true
-        new Pw.Animate().stopAll()
-        new Pw.Animate().scale(node, {scale: 2, context: scene}).run().onStop(function (n) {
+        new PTopo.Animate().stopAll()
+        new PTopo.Animate().scale(node, {scale: 2, context: scene}).run().onStop(function (n) {
           scene.clear()
-          new Pw.Animate().startAll()
+          new PTopo.Animate().startAll()
           GameOver()
         })
       }
@@ -114,7 +114,7 @@
         node.overX = null
         node.overY = null
         //切成两半
-        new Pw.Animate().dividedTwoPiece(node, {angle: angle, context: scene}).run().onStop(function (n) {
+        new PTopo.Animate().dividedTwoPiece(node, {angle: angle, context: scene}).run().onStop(function (n) {
           node.setImage('./img/black.png', true)
         })
       }
@@ -123,7 +123,7 @@
     for (var i = 0; i < nodes.length; i++) {
       var node = nodes[i]
       //不停的向往抛
-      var e = new Pw.Animate().repeatThrow(node, {context: scene}).run()
+      var e = new PTopo.Animate().repeatThrow(node, {context: scene}).run()
         .onStop(function (n) {
           if (n.visible == true) {
             if (!isBoom(n)) {
@@ -138,13 +138,13 @@
           }
         })
       //旋转着
-      new Pw.Animate().rotate(node, {context: scene}).run()
+      new PTopo.Animate().rotate(node, {context: scene}).run()
     }
   }
 
   // 在指定位置显示图像节点
   function iconNode(image, x, y, isMenu) {
-    var node = new Pw.Node()
+    var node = new PTopo.Node()
     node.setImage('./img/black.png', true)
     node.setLocation(x, y)
     scene.add(node)
@@ -159,12 +159,12 @@
   // 游戏结束
   function GameOver() {
     isGameOver = true
-    new Pw.Animate().stopAll()
+    new PTopo.Animate().stopAll()
     setTimeout(function () {
       scene.clear()
-      new Pw.Animate().startAll()
+      new PTopo.Animate().startAll()
       var overNode = iconNode('game-over.png', 60, -100)
-      new Pw.Animate().move(overNode, {context: scene, position: {x: 60, y: 200}}).run()
+      new PTopo.Animate().move(overNode, {context: scene, position: {x: 60, y: 200}}).run()
       setTimeout(function () {
         location.href = location.href
       }, 3000)
@@ -175,34 +175,34 @@
   function showMenu() {
     scene.clear()
     var headBgNode = iconNode('home-mask.png', 0, -300)
-    new Pw.Animate().move(headBgNode, {context: scene, position: {x: 0, y: 0}}).run()
+    new PTopo.Animate().move(headBgNode, {context: scene, position: {x: 0, y: 0}}).run()
 
     var logoNode = iconNode('logo.png', 14, -600)
-    new Pw.Animate().move(logoNode, {context: scene, position: {x: 14, y: 2}}).run()
+    new PTopo.Animate().move(logoNode, {context: scene, position: {x: 14, y: 2}}).run()
 
     var ninjaNode = iconNode('ninja.png', 320, -900)
-    new Pw.Animate().move(ninjaNode, {context: scene, position: {x: 320, y: 40}}).run()
+    new PTopo.Animate().move(ninjaNode, {context: scene, position: {x: 320, y: 40}}).run()
 
     var homeDescNode = iconNode('home-desc.png', -1000, 127)
-    new Pw.Animate().move(homeDescNode, {context: scene, position: {x: 16, y: 127}}).run()
+    new PTopo.Animate().move(homeDescNode, {context: scene, position: {x: 16, y: 127}}).run()
 
     setTimeout(function () {
       var peachNode = iconNode('peach.png', 91, 306, true)
       var dojoNode = iconNode('dojo.png', 34, 248)
-      new Pw.Animate().rotate(dojoNode, {context: scene, v: -0.01}).run()
-      new Pw.Animate().rotate(peachNode, {context: scene, v: 0.03}).run()
+      new PTopo.Animate().rotate(dojoNode, {context: scene, v: -0.01}).run()
+      new PTopo.Animate().rotate(peachNode, {context: scene, v: 0.03}).run()
 
       var newGameNode = iconNode('new-game.png', 239, 220)
       var sandiaNode = iconNode('sandia.png', 289, 275, true)
-      new Pw.Animate().rotate(sandiaNode, {context: scene, v: 0.04}).run()
-      new Pw.Animate().rotate(newGameNode, {context: scene, v: 0.01}).run()
+      new PTopo.Animate().rotate(sandiaNode, {context: scene, v: 0.04}).run()
+      new PTopo.Animate().rotate(newGameNode, {context: scene, v: 0.01}).run()
 
       // 晃动的New
       var newNode = iconNode('new.png', 148, 213)
-      new Pw.Animate().cycle(newNode, {context: scene, p1: {x: 34, y: 190}, p2: {x: 34, y: 200}}).run()
+      new PTopo.Animate().cycle(newNode, {context: scene, p1: {x: 34, y: 190}, p2: {x: 34, y: 200}}).run()
       var quitNode = iconNode('quit.png', 485, 303)
       var boomNode = iconNode('boom.png', 521, 333, true)
-      new Pw.Animate().rotate(quitNode, {context: scene, v: 0.02}).run()
+      new PTopo.Animate().rotate(quitNode, {context: scene, v: 0.02}).run()
       // 切开菜单开始
       scene.mousemove(function (e) {
         var node = e.target
@@ -211,7 +211,7 @@
           return
         }
         //切成两半
-        new Pw.Animate().dividedTwoPiece(node,
+        new PTopo.Animate().dividedTwoPiece(node,
           {angle: Math.atan2(node.y - e.y, node.x - e.x), context: scene}).run().onStop(function (n) {
           startGame()
         })

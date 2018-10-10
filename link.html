@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>link</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -16,21 +16,21 @@
 <canvas id="canvas"></canvas>
 
 <script>
-  canvas.width = document.documentElement.clientWidth
-  canvas.height = document.documentElement.clientHeight
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
   
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
   scene.background = './img/bg.jpg'
 
   // node
   function newNode(x, y, w, h, text) {
-    const node = new Pw.Node(text)
+    const node = new PTopo.Node(text)
 
     node.setLocation(x, y)
     if (w || h) node.setSize(w, h)
@@ -41,7 +41,7 @@
 
   // link
   function newLink(nodeA, nodeZ, text, dashedPattern) {
-    const link = new Pw.Link(nodeA, nodeZ, text)
+    const link = new PTopo.Link(nodeA, nodeZ, text)
 
     link.lineWidth = 3
     link.dashedPattern = dashedPattern
@@ -56,7 +56,7 @@
 
   // foldLink
   function newFoldLink(nodeA, nodeZ, text, direction, dashedPattern) {
-    const link = new Pw.FoldLink(nodeA, nodeZ, text)
+    const link = new PTopo.FoldLink(nodeA, nodeZ, text)
 
     link.direction = direction || 'horizontal'
     link.arrowsRadius = 15
@@ -64,7 +64,7 @@
     link.bundleGap = 20
     link.bundleOffset = 60
     link.textOffsetY = 3
-    link.strokeColor = Pw.util.randomColor()
+    link.strokeColor = PTopo.util.randomColor()
     link.dashedPattern = dashedPattern
     scene.add(link)
 
@@ -72,7 +72,7 @@
   }
 
   function newFlexionalLink(nodeA, nodeZ, text, direction, dashedPattern) {
-    const link = new Pw.FlexionalLink(nodeA, nodeZ, text)
+    const link = new PTopo.FlexionalLink(nodeA, nodeZ, text)
 
     link.direction = direction || 'horizontal'
     link.arrowsRadius = 10
@@ -88,7 +88,7 @@
   }
 
   function newCurveLink(nodeA, nodeZ, text) {
-    const link = new Pw.CurveLink(nodeA, nodeZ, text)
+    const link = new PTopo.CurveLink(nodeA, nodeZ, text)
 
     link.lineWidth = 3
     scene.add(link)
