@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>beautiful sky</title>
-  <script src="../dist/pw.js"></script>
+  <script src="./js/pw.js"></script>
   <style>
     body {
       padding: 0;
@@ -35,20 +35,20 @@
   const nodes = []
 
   function create_node() {
-    const x = Math.random()*stage.width
-    const y = Math.random()*stage.height
+    const x = Math.random() * stage.width
+    const y = Math.random() * stage.height
     const node = new Pw.CircleNode()
-    node.vx = Math.random()*6-3
-    node.vy = Math.random()*6 - 3
-    node.radius = Math.random()*10+2
+    node.vx = Math.random() * 6 - 3
+    node.vy = Math.random() * 6 - 3
+    node.radius = Math.random() * 10 + 2
     node.mass = node.radius
     node.fillColor = Pw.util.randomColor()
-    node.setLocation(x,y)
+    node.setLocation(x, y)
     scene.add(node)
     return node
   }
 
-  for (let i=0;i<90;i++){
+  for (let i = 0; i < 90; i++) {
     const node = create_node()
     nodes.push(node)
   }
@@ -56,29 +56,29 @@
   function move(node) {
     node.x += node.vx
     node.y += node.vy
-    if (node.x>stage.width)node.x = 0
-    if (node.y>stage.height) node.y = 0
-    if (node.x-node.width<0) node.x = stage.width
-    if(node.y - node.height < 0) node.y = stage.height
+    if (node.x > stage.width) node.x = 0
+    if (node.y > stage.height) node.y = 0
+    if (node.x - node.width < 0) node.x = stage.width * Math.random()
+    if (node.y - node.height < 0) node.y = stage.height * Math.random()
   }
 
-  const minDist  =100
+  const minDist = 100
   const springAmount = .0025
 
-  function spring(a, b){
+  function spring(a, b) {
     const dx = b.x - a.x
     const dy = b.y - a.y
 
     const dist = Pw.util.getDistance(a, b)
 
-    if (dist<minDist){
+    if (dist < minDist) {
       const g = stage.graphics
-      const alpha = 1 - dist/minDist
+      const alpha = 1 - dist / minDist
       g.beginPath()
-      g.strokeStyle = 'rgba(255,255,255,'+alpha+')'
+      g.strokeStyle = 'rgba(255,255,255,' + alpha + ')'
       g.lineWidth = 1
-      g.moveTo(a.x + a.width/2, a.y + a.height/2)
-      g.lineTo(b.x + b.width/2, b.y + b.height/2)
+      g.moveTo(a.x + a.width / 2, a.y + a.height / 2)
+      g.lineTo(b.x + b.width / 2, b.y + b.height / 2)
       g.stroke()
       g.closePath()
       const ax = dx * springAmount
@@ -90,11 +90,11 @@
     }
   }
 
-  (function f(){
+  (function f() {
     stage.paint()
-    for(var i=0; i<nodes.length; i++){
-      for(var j=0; j<nodes.length; j++){
-        if(j == i) continue
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = 0; j < nodes.length; j++) {
+        if (j == i) continue
         spring(nodes[i], nodes[j])
       }
       move(nodes[i])
@@ -103,7 +103,7 @@
     requestAnimationFrame(f)
   })()
 
-  stage.addEventListener('mouseup', function(e){
+  stage.addEventListener('mouseup', function (e) {
     var node = create_node()
     node.setLocation(e.x, e.y)
     nodes.push(node)

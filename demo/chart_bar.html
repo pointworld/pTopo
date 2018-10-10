@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>pie chart</title>
-  <script src="../dist/pw.js"></script>
+  <title>bar chart</title>
+  <script src="./js/pw.js"></script>
   <style>
     body {
       padding: 0;
@@ -28,26 +28,23 @@
 
   scene.background = './img/bg.jpg'
 
-  const node = new Pw.PieChartNode()
+  const node = new Pw.BarChartNode()
 
+  node.height = 320
+  node.width = 400
   node.shadow = false
   node.radius = 100
-  node.colors = ['#3666b0',"#2CA8E0","#77D1F6"]
-  node.datas=[.3,.3,.4]
-  node.titles = ['A','B', 'C']
-  node.setLocation(300, 203)
+  node.colors = ["#3666B0","#2CA8E0","#77D1F6","#12DFE5"]
+  node.datas=[130, 200, 120, 180]
+  node.titles = ['2015', '2016', '2017', '2018']
+  node.setLocation(150, 103)
   scene.add(node)
 
-  function f(n){
-    if(n > 20) return
-    node.datas[1] += 0.01
-    node.datas[2] -= 0.01
-
-    setTimeout(function(){
-      f(n+1)
-    }, 100)
+  function f(){
+    if(node.datas[1]++ > 300) return
+    setTimeout(f, 30)
   }
-  f(0)
+  f()
 </script>
 </body>
 </html>

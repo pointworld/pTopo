@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>spring chains effect</title>
-  <script src="../dist/pw.js"></script>
+  <title>simple spring effect</title>
+  <script src="./js/pw.js"></script>
   <style>
     body {
       padding: 0;
@@ -27,40 +27,33 @@
   const scene = new Pw.Scene()
   stage.frames = 24
 
-  scene.shadow = true
   scene.background = './img/bg.jpg'
   stage.add(scene)
 
-  const nodes = []
-
-  for (let i = 0; i<5; i++){
-    const node = new Pw.CircleNode()
+  function create_node(x, y, name) {
+    const node = new Pw.CircleNode(name)
     node.radius = 20
-    node.fillStyle = Pw.util.randomColor()
-    node.setLocation(400,200)
+    node.fillColor = Pw.util.randomColor()
+    node.setLocation(x, y)
     scene.add(node)
-    nodes.push(node)
+    return node
   }
 
-  const links = []
-  for (let i=0;i<nodes.length;i++){
-    const link = new Pw.Link(nodes[i-1], nodes[i])
-    scene.add(link)
-    links.push(link)
-  }
+  // node
+  const targetNode = create_node(400, 200, 'target')
+  const node = create_node(400, 200, 'node')
 
-  // define effect
+  // link
+  scene.add(new Pw.Link(targetNode, node))
+
+  // spring effect (gravity, friction)
   const effect = new Pw.Effect()
     .spring({
-      grivity: 9,
-      spring: .4,
-      friction: .3
+      grivity: 10
     })
 
   // add effect to target
-  for (let i=1; i<nodes.length; i++) {
-    effect.addNode(nodes[i-1], nodes[i])
-  }
+  effect.addNode(node, targetNode)
 
   // play
   effect.play(1000)

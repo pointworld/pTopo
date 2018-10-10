@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>tree layout</title>
-  <script src="../dist/pw.js"></script>
+  <title>mix layout</title>
+  <script src="./js/pw.js"></script>
   <style>
     body {
       padding: 0;
@@ -33,23 +33,33 @@
 
   const cloudNode = new Pw.Node('root')
   cloudNode.setSize(30, 26)
-  cloudNode.setLocation(360, 130)
-  cloudNode.layout = {type: 'tree', width: 180, height: 100}
+  cloudNode.setLocation(460, 280)
+  cloudNode.layout = {type: 'circle', radius: 160}
 
   scene.add(cloudNode)
 
-  for (let i = 1; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     const node = new Pw.CircleNode('host' + i)
     node.fillStyle = '200,255,0'
     node.radius = 15
-    node.setLocation(scene.width * Math.random(), scene.height * Math.random())
-    node.layout = {type: 'tree', width: 50, height: 100}
+    node.setLocation(scene.width * Math.random(), scene.heigh * Math.random())
+
+    if (i === 2) {
+      node.layout = {type: 'tree', direction: 'top', width: 50, height: 90}
+    }
+    else if (i === 1) {
+      node.layout = {type: 'tree', direction: 'left', width: 50, height: 90}
+    }
+    else {
+      node.layout = {type: 'circle', radius: 60}
+    }
 
     scene.add(node)
+
     const link = new Pw.Link(cloudNode, node)
     scene.add(link)
 
-    for (let j = 0; j < 4; j++) {
+    for (let j = 0; j < 6; j++) {
       const vmNode = new Pw.CircleNode('vm-' + i + '-' + j)
       vmNode.radius = 10
       vmNode.fillStyle = '255,255,0'
@@ -58,6 +68,7 @@
       scene.add(new Pw.Link(node, vmNode))
     }
   }
+
   Pw.Layout.layoutNode(scene, cloudNode, true)
 
   scene.addEventListener('mouseup', function (e) {
@@ -65,7 +76,6 @@
       Pw.Layout.layoutNode(scene, e.target, true)
     }
   })
-
 </script>
 </body>
 </html>

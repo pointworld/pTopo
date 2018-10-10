@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>multi-targets spring effect</title>
-  <script src="../dist/pw.js"></script>
+  <title>spring chains effect</title>
+  <script src="./js/pw.js"></script>
   <style>
     body {
       padding: 0;
@@ -25,6 +25,7 @@
 
   const stage = new Pw.Stage(canvas)
   const scene = new Pw.Scene()
+  stage.frames = 24
 
   scene.shadow = true
   scene.background = './img/bg.jpg'
@@ -32,31 +33,35 @@
 
   const nodes = []
 
-  // center node of a circle
-  const circleNode = new Pw.CircleNode()
-  circleNode.fillStyle = Pw.util.randomColor()
-  scene.add(circleNode)
-
-  // three control points
-  for(let i=0; i<3; i++){
-    const node = new Pw.Node()
+  for (let i = 0; i<5; i++){
+    const node = new Pw.CircleNode()
+    node.radius = 20
     node.fillStyle = Pw.util.randomColor()
-    node.setLocation(100 + Math.random() * 500, 100 + Math.random() * 400)
+    node.setLocation(400,200)
     scene.add(node)
     nodes.push(node)
   }
-  for(let i=0; i<nodes.length; i++){
-    scene.add(new Pw.Link(circleNode, nodes[i]))
+
+  const links = []
+  for (let i=0;i<nodes.length;i++){
+    const link = new Pw.Link(nodes[i-1], nodes[i])
+    scene.add(link)
+    links.push(link)
   }
 
   // define effect
-  const effect = new Pw.Effect().spring()
+  const effect = new Pw.Effect()
+    .spring({
+      grivity: 9,
+      spring: .4,
+      friction: .3
+    })
 
   // add effect to target
-  for(let i=0; i<nodes.length; i++){
-    // make spring by three control points on center node of a circle
-    effect.addNode(circleNode, nodes[i])
+  for (let i=1; i<nodes.length; i++) {
+    effect.addNode(nodes[i-1], nodes[i])
   }
+
   // play
   effect.play(1000)
 
