@@ -1,7 +1,0 @@
-# PROJECT.md
-
-## contents
-
-```text
-
-```
