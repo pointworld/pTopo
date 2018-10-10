@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>gravity effect</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -19,31 +19,31 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
 
   scene.shadow = false
 
   scene.background = './img/bg.jpg'
 
   for (let i = 0; i < 200; i++) {
-    const node = new Pw.Node()
+    const node = new PTopo.Node()
     node.rotate = Math.random()
     node.scaleX = Math.random()
     node.scaleY = Math.random()
     node.alpha = Math.random()
     node.setLocation(Math.random() * canvas.width, Math.random() * canvas.height)
-    node.fillColor = Pw.util.randomColor()
+    node.fillColor = PTopo.util.randomColor()
     scene.add(node)
   }
 
   scene.click(function (event) {
     scene.childs.forEach(function (node) {
-      new Pw.Effect()
+      new PTopo.Effect()
         .gravity(node, {
           dx: 5 * Math.random() - 5 * Math.random(),
           dy: 10 * Math.random() - 10 * Math.random(),

@@ -45,24 +45,24 @@ Array.prototype.unique = function () {
   return res
 }
 
-CanvasRenderingContext2D.prototype.PwRoundRect = function (x, y, w, h, borderRadius, borderDashed) {
+CanvasRenderingContext2D.prototype.PTopoRoundRect = function (x, y, w, h, borderRadius, borderDashed) {
   !borderRadius && (borderRadius = 5)
 
   if (borderDashed) {
     this.beginPath()
 
-    this.PwDashedLineTo(x + borderRadius, y, x + w - borderRadius, y)
+    this.PTopoDashedLineTo(x + borderRadius, y, x + w - borderRadius, y)
     this.quadraticCurveTo(x + w, y, x + w, y + borderRadius)
 
-    this.PwDashedLineTo(x + w, y + borderRadius, x + w, y + h - borderRadius)
+    this.PTopoDashedLineTo(x + w, y + borderRadius, x + w, y + h - borderRadius)
     this.quadraticCurveTo(x + w, y + h, x + w - borderRadius, y + h)
 
-    this.PwDashedLineTo(x + w - borderRadius, y + h, x + borderRadius, y + h)
+    this.PTopoDashedLineTo(x + w - borderRadius, y + h, x + borderRadius, y + h)
     this.quadraticCurveTo(x, y + h, x, y + h - borderRadius)
 
-    this.PwDashedLineTo(x, y + h - borderRadius, x, y + borderRadius)
+    this.PTopoDashedLineTo(x, y + h - borderRadius, x, y + borderRadius)
     this.quadraticCurveTo(x, y, x + borderRadius, y)
-    this.PwDashedLineTo(x, y, x + borderRadius, y)
+    this.PTopoDashedLineTo(x, y, x + borderRadius, y)
 
     this.closePath()
   }
@@ -80,7 +80,7 @@ CanvasRenderingContext2D.prototype.PwRoundRect = function (x, y, w, h, borderRad
     this.closePath()
   }
 }
-CanvasRenderingContext2D.prototype.PwDashedLineTo = function (x1, y1, x2, y2, dashedLineSpacing) {
+CanvasRenderingContext2D.prototype.PTopoDashedLineTo = function (x1, y1, x2, y2, dashedLineSpacing) {
   !dashedLineSpacing && (dashedLineSpacing = 5)
 
   const w = x2 - x1
@@ -108,7 +108,7 @@ CanvasRenderingContext2D.prototype.PwDashedLineTo = function (x1, y1, x2, y2, da
 
   this.stroke()
 }
-CanvasRenderingContext2D.prototype.PwDrawPointPath = function (x1, y1, x2, y2, strokeStyle, PointPathColor) {
+CanvasRenderingContext2D.prototype.PTopoDrawPointPath = function (x1, y1, x2, y2, strokeStyle, PointPathColor) {
   const animSpeed = (new Date()) / 10
 
   const w = x2 - x1

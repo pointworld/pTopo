@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>node</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -16,20 +16,20 @@
 <canvas id="canvas"></canvas>
 
 <script>
-  canvas.width = document.documentElement.clientWidth
-  canvas.height = document.documentElement.clientHeight
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
   scene.background = './img/bg.jpg'
 
   function newNode(x, y, w, h, text) {
-    const node = new Pw.Node(text)
+    const node = new PTopo.Node(text)
 
     node.setLocation(x, y)
     if (w || h) node.setSize(w, h)
@@ -54,13 +54,13 @@
   vueNode.setImage('./img/logo.png', true)
   vueNode.showSelected = false
 
-  const textNode = new Pw.TextNode('This is a text node.')
+  const textNode = new PTopo.TextNode('This is a text node.')
 
   textNode.font = 'bold 16px Microsoft-Yahei'
   textNode.setLocation(317, 250)
   scene.add(textNode)
 
-  const linkNode = new Pw.LinkNode('hyper-link: https://github.com/pointworld')
+  const linkNode = new PTopo.LinkNode('hyper-link: https://github.com/pointworld')
 
   linkNode.href = 'https://github.com/pointworld'
   linkNode.target = '_blank'
@@ -71,13 +71,13 @@
   linkNode.setLocation(250, 360)
   scene.add(linkNode)
 
-  const peopleNode = new Pw.Node('people')
+  const peopleNode = new PTopo.Node('people')
 
   peopleNode.setBound(500, 210, 64, 64)
   peopleNode.setImage('./img/logo.png')
   scene.add(peopleNode)
 
-  const circleNode = new Pw.CircleNode('circle node')
+  const circleNode = new PTopo.CircleNode('circle node')
 
   circleNode.radius = 24
   circleNode.alpha = .7

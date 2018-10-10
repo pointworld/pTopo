@@ -9,7 +9,7 @@ const version = process.env.VERSION || require('../package.json').version
 
 const banner =
   '/*!\n' +
-  ' * Pw.js v' + version + '\n' +
+  ' * pTopo.js v' + version + '\n' +
   ' * (c) 2018-' + new Date().getFullYear() + ' Point\n' +
   ' * Released under the MIT License.\n' +
   ' */'
@@ -68,7 +68,7 @@ function genConfig (name) {
       file: opts.dest,
       format: opts.format,
       banner: opts.banner,
-      name: opts.moduleName || 'Pw'
+      name: opts.moduleName || 'pTopo'
     }
   }
 
@@ -98,11 +98,11 @@ if (false) {
 export default {
   input: 'src/main.js',
   output: {
-    file: 'dist/pw.js',
-    name: 'Pw',
+    file: 'dist/pTopo.js',
+    name: 'pTopo',
     format: 'umd',
     globals: {
-      pw: '$'
+      pTopo: '$'
     },
     banner
   },

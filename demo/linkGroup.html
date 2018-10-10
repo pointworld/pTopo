@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>link group</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -16,23 +16,23 @@
 <canvas id="canvas" width="1000" height="650"></canvas>
 
 <script>
-  canvas.width = document.documentElement.clientWidth
-  canvas.height = document.documentElement.clientHeight
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
+  const stage = new PTopo.Stage(canvas)
 
   stage.frames = -24
 
-  const scene = new Pw.Scene(stage)
+  const scene = new PTopo.Scene(stage)
   scene.background = './img/bg.jpg'
 
   function newNode(x, y, w, h, text) {
-    const node = new Pw.Node(text)
+    const node = new PTopo.Node(text)
 
     node.setLocation(x, y)
     if (w || h) node.setSize(w, h)
@@ -42,13 +42,13 @@
   }
 
   function newLink(nodeA, nodeZ, text, dashedPattern) {
-    const link = new Pw.Link(nodeA, nodeZ, text)
+    const link = new PTopo.Link(nodeA, nodeZ, text)
 
     link.lineWidth = 3
     link.bundleOffset = 60
     link.bundleGap = 20
     link.textOffsetY = 3
-    link.strokeColor = Pw.util.randomColor()
+    link.strokeColor = PTopo.util.randomColor()
     link.dashedPattern = dashedPattern
     scene.add(link)
 
@@ -66,7 +66,7 @@
 
   // foldLink
   function newFoldLink(nodeA, nodeZ, text, direction, dashedPattern) {
-    const link = new Pw.FoldLink(nodeA, nodeZ, text)
+    const link = new PTopo.FoldLink(nodeA, nodeZ, text)
 
     link.direction = direction || 'horizontal'
     link.arrowsRadius = 15
@@ -74,7 +74,7 @@
     link.bundleOffset = 60
     link.bundleGap = 20
     link.textOffsetY = 3
-    link.strokeColor = Pw.util.randomColor()
+    link.strokeColor = PTopo.util.randomColor()
     link.dashedPattern = dashedPattern
     scene.add(link)
 
@@ -88,26 +88,26 @@
   newFoldLink(fromNode2, node2, 'down', 'vertical')
 
   function newFlexionalLink(nodeA, nodeZ, text, dashedPattern) {
-    const link = new Pw.FlexionalLink(nodeA, nodeZ, text)
+    const link = new PTopo.FlexionalLink(nodeA, nodeZ, text)
 
     link.arrowsRadius = 10
     link.lineWidth = 3
     link.offsetGap = 30
     link.bundleGap = 15
     link.textOffsetY = 10
-    link.strokeColor = Pw.util.randomColor()
+    link.strokeColor = PTopo.util.randomColor()
     link.dashedPattern = dashedPattern
     scene.add(link)
 
     return link
   }
 
-  const fromNode3 = new Pw.Node('from')
+  const fromNode3 = new PTopo.Node('from')
   fromNode3.setSize(60, 60)
   fromNode3.setLocation(500, 60)
   scene.add(fromNode3)
 
-  const node3 = new Pw.Node("to")
+  const node3 = new PTopo.Node("to")
   node3.setSize(60, 60)
   node3.setLocation(545, 220)
   scene.add(node3)
@@ -118,17 +118,17 @@
   }
 
   // --------- loop
-  const loopNode = new Pw.Node("loop")
+  const loopNode = new PTopo.Node("loop")
   loopNode.setLocation(600, 400)
   scene.add(loopNode)
 
   for (let i = 0; i < 3; i++) {
-    const link = new Pw.Link(loopNode, loopNode)
+    const link = new PTopo.Link(loopNode, loopNode)
     link.text = 'L' + i
     link.lineWidth = 3
     link.bundleGap = 30
     link.textOffsetY = 3
-    link.strokeColor = Pw.util.randomColor()
+    link.strokeColor = PTopo.util.randomColor()
     link.type = 'loop'
     scene.add(link)
   }

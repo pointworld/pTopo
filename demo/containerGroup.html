@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>container group</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -24,12 +24,12 @@
     canvas.height = document.documentElement.clientHeight
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene()
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene()
   scene.background = './img/bg.jpg'
   stage.add(scene)
 
-  const container = new Pw.Container('边界自动变化')
+  const container = new PTopo.Container('边界自动变化')
 
   container.textPosition = 'Middle_Center'
   container.fontColor = '255, 255, 255'
@@ -40,28 +40,28 @@
   scene.add(container)
 
   for (let i = 0; i < 5; i++) {
-    const node = new Pw.Node("A_" + i)
+    const node = new PTopo.Node("A_" + i)
     node.textPosition = "Middle_Center"
     node.setLocation(300 + Math.random() * 300, 200 + Math.random() * 200)
     scene.add(node)
     container.add(node)
   }
 
-  scene.add(new Pw.Link(container.childs[0], container.childs[1]))
-  scene.add(new Pw.Link(container.childs[2], container.childs[3]))
+  scene.add(new PTopo.Link(container.childs[0], container.childs[1]))
+  scene.add(new PTopo.Link(container.childs[2], container.childs[3]))
 
-  const flowLayout = Pw.Layout.FlowLayout(10, 10)
+  const flowLayout = PTopo.Layout.FlowLayout(10, 10)
 
-  const gridLayout = Pw.Layout.GridLayout(4, 3)
+  const gridLayout = PTopo.Layout.GridLayout(4, 3)
 
-  const container2 = new Pw.Container('点击切换布局')
+  const container2 = new PTopo.Container('点击切换布局')
   container2.layout = flowLayout
   container2.fillColor = '10,10,100'
   container2.setBound(10, 10, 300, 200)
   scene.add(container2)
 
   for (let i = 0; i < 12; i++) {
-    const node = new Pw.Node("F_" + i)
+    const node = new PTopo.Node("F_" + i)
     node.textPosition = "Middle_Center"
     scene.add(node)
     container2.add(node)

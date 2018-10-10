@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>text position</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,12 +20,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
   scene.background = './img/bg.jpg'
 
   const ps = ['Top_Left', 'Top_Center', 'Top_Right', 'Middle_Left', 'Middle_Center'
@@ -37,7 +37,7 @@
     for (let j = 0; j < 3; j++) {
       let text = ps[n]
       let position = ps[n++]
-      const circleNode = new Pw.Node(text)
+      const circleNode = new PTopo.Node(text)
 
       circleNode.setSize(40, 40)
       circleNode.fontColor = '255,255,255'
@@ -48,7 +48,7 @@
     }
   }
 
-  const circleNode1 = new Pw.CircleNode('left-bottom offset')
+  const circleNode1 = new PTopo.CircleNode('left-bottom offset')
 
   circleNode1.fillColor = '0,0,0'
   circleNode1.setLocation(750, 200)

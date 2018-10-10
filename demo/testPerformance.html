@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>test performance</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,12 +20,12 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
   scene.background = './img/bg.jpg'
 
   const nodeCount = 10000
@@ -35,7 +35,7 @@
   }
 
   function createNode(x, y, text) {
-    const node = new Pw.CircleNode()
+    const node = new PTopo.CircleNode()
 
     node.radius = 10
     node.shadow = false
@@ -48,7 +48,7 @@
     })
     node.setSize(20, 20)
     node.setLocation(x, y)
-    node.fillColor = Pw.util.randomColor()
+    node.fillColor = PTopo.util.randomColor()
     scene.add(node)
 
     return node
@@ -63,7 +63,7 @@
     let x2 = x + randomCoor(1000)
     let y2 = y + randomCoor(1000)
     const nodeTo = createNode(x2, y2, 'To_' + i)
-    const link = new Pw.Link(nodeFrom, nodeTo)
+    const link = new PTopo.Link(nodeFrom, nodeTo)
     link.shadow = false
     link.lineWidth = 1
     scene.add(link)

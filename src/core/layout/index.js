@@ -21,7 +21,7 @@ function i(a, b, c, d) {
   b.x += c
   b.y += d
 
-  const e = Pw.Layout.getNodeChilds(a, b)
+  const e = PTopo.Layout.getNodeChilds(a, b)
 
   for (let f = 0; f < e.length; f++) {
     i(a, e[f], c, d)
@@ -31,7 +31,7 @@ function i(a, b, c, d) {
 
 function j(links, node) {
   function sugar(node, e) {
-    const nodeChildsArr = Pw.Layout.getNodeChilds(links, node)
+    const nodeChildsArr = PTopo.Layout.getNodeChilds(links, node)
 
     if (!d[e]) {
       d[e] = {}

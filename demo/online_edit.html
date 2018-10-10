@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>online edit</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -19,42 +19,42 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
 
   scene.background = './img/bg.jpg'
 
-  const msgNode = new Pw.TextNode("点击节点可连线(连个节点)")
+  const msgNode = new PTopo.TextNode("点击节点可连线(连个节点)")
   msgNode.zIndex++
   msgNode.setBound(250, 50)
   scene.add(msgNode)
 
   for (let i = 0; i < 5; i++) {
-    const node = new Pw.Node('Node_' + i)
+    const node = new PTopo.Node('Node_' + i)
     node.setLocation(Math.random() * 600, Math.random() * 400)
     scene.add(node)
   }
 
 
   let beginNode = null
-  const tempNodeA = new Pw.Node('tempA')
+  const tempNodeA = new PTopo.Node('tempA')
   tempNodeA.setSize(1, 1)
 
-  const tempNodeZ = new Pw.Node('tempZ')
+  const tempNodeZ = new PTopo.Node('tempZ')
   tempNodeZ.setSize(1, 1)
 
-  const link = new Pw.Link(tempNodeA, tempNodeZ)
+  const link = new PTopo.Link(tempNodeA, tempNodeZ)
 
   scene.mouseup(function (e) {
     if (e.button === 2) {
       scene.remove(link)
       return
     }
-    if (e.target && e.target instanceof Pw.Node) {
+    if (e.target && e.target instanceof PTopo.Node) {
       if (!beginNode) {
         beginNode = e.target
         scene.add(link)
@@ -62,7 +62,7 @@
         tempNodeZ.setLocation(e.x, e.y)
       } else if (beginNode !== e.target) {
         let endNode = e.target
-        const l = new Pw.Link(beginNode, endNode)
+        const l = new PTopo.Link(beginNode, endNode)
         scene.add(l)
         beginNode = null
         scene.remove(link)

@@ -64,7 +64,7 @@ export default class _Node extends EditableElement {
 
       !this.borderRadius
         ? ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height)
-        : ctx.PwRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius)
+        : ctx.PTopoRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius)
 
       ctx.fill()
       ctx.closePath()
@@ -113,7 +113,7 @@ export default class _Node extends EditableElement {
         )
       }
       else {
-        ctx.PwRoundRect(
+        ctx.PTopoRoundRect(
           -this.width / 2 - halfBW,
           -this.height / 2 - halfBW,
           this.width + this.borderWidth,

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>relationship of devices</title>
-  <script src="./js/pw.js"></script>
+  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -20,17 +20,17 @@
   canvas.height = document.documentElement.clientHeight - 10
 
   window.addEventListener('resize', function () {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
+    canvas.width = document.documentElement.clientWidth - 10
+    canvas.height = document.documentElement.clientHeight - 10
   })
 
-  const stage = new Pw.Stage(canvas)
-  const scene = new Pw.Scene(stage)
+  const stage = new PTopo.Stage(canvas)
+  const scene = new PTopo.Scene(stage)
 
   scene.background = './img/bg.jpg'
 
   function node(x, y, img) {
-    const node = new Pw.Node()
+    const node = new PTopo.Node()
 
     node.setImage('./img/' + img, true)
     node.setLocation(x, y)
@@ -43,9 +43,9 @@
     let link
 
     if (f) {
-      link = new Pw.FoldLink(nodeA, nodeZ)
+      link = new PTopo.FoldLink(nodeA, nodeZ)
     } else {
-      link = new Pw.Link(nodeA, nodeZ)
+      link = new PTopo.Link(nodeA, nodeZ)
     }
 
     link.direction = 'vertical'
@@ -79,7 +79,7 @@
   linkNode(vue3, vue4)
 
   function hostLink(nodeA, nodeZ) {
-    const link = new Pw.FlexionalLink(nodeA, nodeZ)
+    const link = new PTopo.FlexionalLink(nodeA, nodeZ)
     link.shadow = false
     link.offsetGap = 44
     scene.add(link)

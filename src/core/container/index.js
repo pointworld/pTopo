@@ -79,7 +79,7 @@ export default class Container extends InteractiveElement {
 
       !this.borderRadius
         ? ctx.rect(this.x, this.y, this.width, this.height)
-        : ctx.PwRoundRect(this.x, this.y, this.width, this.height, this.borderRadius)
+        : ctx.PTopoRoundRect(this.x, this.y, this.width, this.height, this.borderRadius)
 
       ctx.fill()
       ctx.closePath()
@@ -98,7 +98,7 @@ export default class Container extends InteractiveElement {
 
       !this.borderRadius
         ? ctx.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth)
-        : ctx.PwRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius)
+        : ctx.PTopoRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius)
 
       ctx.stroke()
       ctx.closePath()

@@ -133,7 +133,7 @@ export default class Link extends InteractiveElement {
 
     for (let i = 1, len = pathArr.length; i < len; i++) {
       this.dashedPattern
-        ? ctx.PwDashedLineTo(
+        ? ctx.PTopoDashedLineTo(
         pathArr[i - 1].x,
         pathArr[i - 1].y,
         pathArr[i].x,

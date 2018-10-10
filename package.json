@@ -1,5 +1,5 @@
 {
-  "name": "pw-topo",
+  "name": "pTopo",
   "version": "0.0.0",
   "description": "a topo frame based on canvas",
   "main": "index.js",
@@ -20,18 +20,18 @@
   "keywords": [
     "topo",
     "canvas",
-    "pw"
+    "pTopo"
   ],
   "author": "point <https://github.com/pointworld/>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pointworld/pw-jtopo.git"
+    "url": "git+https://github.com/pointworld/pTopo.git"
   },
   "bugs": {
-    "url": "https://github.com/pointworld/pw-jtopo/issues"
+    "url": "https://github.com/pointworld/pTopo/issues"
   },
-  "homepage": "https://github.com/pointworld/pw-jtopo#readme",
+  "homepage": "https://github.com/pointworld/pTopo#readme",
   "devDependencies": {
     "@babel/core": "^7.0.1",
     "@babel/plugin-external-helpers": "^7.0.0",

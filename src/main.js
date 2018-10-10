@@ -12,7 +12,7 @@ import EventEmitter from './core/events/index'
 import * as util from './shared/util'
 import {version} from '../package.json'
 
-const Pw = Object.assign({
+const PTopo = Object.assign({
   version: version,
   createStageFromJson(jsonStr, canvas) {
     const jsonObj = JSON.parse(jsonStr)
@@ -71,4 +71,4 @@ const Pw = Object.assign({
   Animate,
 })
 
-window.Pw = Pw
+window.PTopo = PTopo

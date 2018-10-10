@@ -1,5 +1,5 @@
 /*!
- * Pw.js v1.0.0
+ * pTopo.js v0.0.0
  * (c) 2018-2018 Point
  * Released under the MIT License.
  */
@@ -181,20 +181,20 @@
     return res;
   };
 
-  CanvasRenderingContext2D.prototype.PwRoundRect = function (x, y, w, h, borderRadius, borderDashed) {
+  CanvasRenderingContext2D.prototype.PTopoRoundRect = function (x, y, w, h, borderRadius, borderDashed) {
     !borderRadius && (borderRadius = 5);
 
     if (borderDashed) {
       this.beginPath();
-      this.PwDashedLineTo(x + borderRadius, y, x + w - borderRadius, y);
+      this.PTopoDashedLineTo(x + borderRadius, y, x + w - borderRadius, y);
       this.quadraticCurveTo(x + w, y, x + w, y + borderRadius);
-      this.PwDashedLineTo(x + w, y + borderRadius, x + w, y + h - borderRadius);
+      this.PTopoDashedLineTo(x + w, y + borderRadius, x + w, y + h - borderRadius);
       this.quadraticCurveTo(x + w, y + h, x + w - borderRadius, y + h);
-      this.PwDashedLineTo(x + w - borderRadius, y + h, x + borderRadius, y + h);
+      this.PTopoDashedLineTo(x + w - borderRadius, y + h, x + borderRadius, y + h);
       this.quadraticCurveTo(x, y + h, x, y + h - borderRadius);
-      this.PwDashedLineTo(x, y + h - borderRadius, x, y + borderRadius);
+      this.PTopoDashedLineTo(x, y + h - borderRadius, x, y + borderRadius);
       this.quadraticCurveTo(x, y, x + borderRadius, y);
-      this.PwDashedLineTo(x, y, x + borderRadius, y);
+      this.PTopoDashedLineTo(x, y, x + borderRadius, y);
       this.closePath();
     } else {
       this.beginPath();
@@ -211,7 +211,7 @@
     }
   };
 
-  CanvasRenderingContext2D.prototype.PwDashedLineTo = function (x1, y1, x2, y2, dashedLineSpacing) {
+  CanvasRenderingContext2D.prototype.PTopoDashedLineTo = function (x1, y1, x2, y2, dashedLineSpacing) {
     !dashedLineSpacing && (dashedLineSpacing = 5);
     var w = x2 - x1;
     var h = y2 - y1;
@@ -228,7 +228,7 @@
     this.stroke();
   };
 
-  CanvasRenderingContext2D.prototype.PwDrawPointPath = function (x1, y1, x2, y2, strokeStyle, PointPathColor) {
+  CanvasRenderingContext2D.prototype.PTopoDrawPointPath = function (x1, y1, x2, y2, strokeStyle, PointPathColor) {
     var animSpeed = new Date() / 10;
     var w = x2 - x1;
     var h = y2 - y1;
@@ -1553,7 +1553,7 @@
         ctx.moveTo(pathArr[0].x, pathArr[0].y);
 
         for (var i = 1, len = pathArr.length; i < len; i++) {
-          this.dashedPattern ? ctx.PwDashedLineTo(pathArr[i - 1].x, pathArr[i - 1].y, pathArr[i].x, pathArr[i].y, this.dashedPattern) : ctx.lineTo(pathArr[i].x, pathArr[i].y);
+          this.dashedPattern ? ctx.PTopoDashedLineTo(pathArr[i - 1].x, pathArr[i - 1].y, pathArr[i].x, pathArr[i].y, this.dashedPattern) : ctx.lineTo(pathArr[i].x, pathArr[i].y);
         }
 
         ctx.stroke();
@@ -2083,7 +2083,7 @@
         } else {
           ctx.beginPath();
           ctx.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")";
-          !this.borderRadius ? ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height) : ctx.PwRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius);
+          !this.borderRadius ? ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height) : ctx.PTopoRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius);
           ctx.fill();
           ctx.closePath();
         }
@@ -2121,7 +2121,7 @@
           if (!this.borderRadius) {
             ctx.rect(-this.width / 2 - halfBW, -this.height / 2 - halfBW, this.width + this.borderWidth, this.height + this.borderWidth);
           } else {
-            ctx.PwRoundRect(-this.width / 2 - halfBW, -this.height / 2 - halfBW, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius);
+            ctx.PTopoRoundRect(-this.width / 2 - halfBW, -this.height / 2 - halfBW, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius);
           }
 
           ctx.stroke();
@@ -3190,7 +3190,7 @@
   function i(a, b, c, d) {
     b.x += c;
     b.y += d;
-    var e = Pw.Layout.getNodeChilds(a, b);
+    var e = PTopo.Layout.getNodeChilds(a, b);
 
     for (var f = 0; f < e.length; f++) {
       i(a, e[f], c, d);
@@ -3199,7 +3199,7 @@
 
   function j(links, node) {
     function sugar(node, e) {
-      var nodeChildsArr = Pw.Layout.getNodeChilds(links, node);
+      var nodeChildsArr = PTopo.Layout.getNodeChilds(links, node);
 
       if (!d[e]) {
         d[e] = {};
@@ -3815,7 +3815,7 @@
           this.layout && this.layout(this, this.childs);
           ctx.beginPath();
           ctx.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")";
-          !this.borderRadius ? ctx.rect(this.x, this.y, this.width, this.height) : ctx.PwRoundRect(this.x, this.y, this.width, this.height, this.borderRadius);
+          !this.borderRadius ? ctx.rect(this.x, this.y, this.width, this.height) : ctx.PTopoRoundRect(this.x, this.y, this.width, this.height, this.borderRadius);
           ctx.fill();
           ctx.closePath();
           this.paintBorder(ctx);
@@ -3830,7 +3830,7 @@
           ctx.lineWidth = this.borderWidth;
           ctx.strokeStyle = "rgba(" + this.borderColor + "," + this.alpha + ")";
           var b = this.borderWidth / 2;
-          !this.borderRadius ? ctx.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth) : ctx.PwRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius);
+          !this.borderRadius ? ctx.rect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth) : ctx.PTopoRoundRect(this.x - b, this.y - b, this.width + this.borderWidth, this.height + this.borderWidth, this.borderRadius);
           ctx.stroke();
           ctx.closePath();
         }
@@ -4857,7 +4857,7 @@
     return Scene;
   }(Element);
 
-  var version = "1.0.0";
+  var version = "0.0.0";
 
   var Stage =
   /*#__PURE__*/
@@ -5813,7 +5813,7 @@
     return Effect;
   }();
 
-  var Pw$1 = Object.assign({
+  var PTopo$1 = Object.assign({
     version: version,
     createStageFromJson: function createStageFromJson(jsonStr, canvas) {
       var jsonObj = JSON.parse(jsonStr);
@@ -5858,6 +5858,6 @@
     Effect: Effect,
     Animate: Animate
   }));
-  window.Pw = Pw$1;
+  window.PTopo = PTopo$1;
 
 })));
