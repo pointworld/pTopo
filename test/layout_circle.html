@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>circle layout</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene()
+
+  stage.add(scene)
+
+  scene.background = './img/bg.jpg'
+
+  const cloudNode = new Pw.Node('root');
+  cloudNode.setSize(30, 26);
+  cloudNode.setLocation(360,230);
+  cloudNode.layout = {type: 'circle', radius: 150};
+
+  scene.add(cloudNode);
+
+  for(let i=1; i<4; i++){
+    const node = new Pw.CircleNode('host' + i);
+    node.fillStyle = '200,255,0';
+    node.radius = 15;
+    node.setLocation(scene.width * Math.random(), scene.height * Math.random());
+    node.layout = {type: 'circle', radius: 80};
+
+    scene.add(node);
+    const link = new Pw.Link(cloudNode, node);
+    scene.add(link);
+
+    for(let j=0; j<8; j++){
+      const vmNode = new Pw.CircleNode('vm-' + i + '-' + j);
+      vmNode.radius = 10;
+      vmNode.fillStyle = '255,255,0';
+      vmNode.setLocation(scene.width * Math.random(), scene.height * Math.random());
+      scene.add(vmNode);
+      scene.add(new Pw.Link(node, vmNode));
+    }
+  }
+
+  Pw.Layout.layoutNode(scene, cloudNode, true);
+
+  scene.addEventListener('mouseup', function(e){
+    if(e.target && e.target.layout){
+      Pw.Layout.layoutNode(scene, e.target, true);
+    }
+  });
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

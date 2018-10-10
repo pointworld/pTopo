@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>multi-targets spring effect</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene()
+
+  scene.shadow = true
+  scene.background = './img/bg.jpg'
+  stage.add(scene)
+
+  const nodes = []
+
+  // center node of a circle
+  const circleNode = new Pw.CircleNode()
+  circleNode.fillStyle = Pw.util.randomColor()
+  scene.add(circleNode)
+
+  // three control points
+  for(let i=0; i<3; i++){
+    const node = new Pw.Node()
+    node.fillStyle = Pw.util.randomColor()
+    node.setLocation(100 + Math.random() * 500, 100 + Math.random() * 400)
+    scene.add(node)
+    nodes.push(node)
+  }
+  for(let i=0; i<nodes.length; i++){
+    scene.add(new Pw.Link(circleNode, nodes[i]))
+  }
+
+  // define effect
+  const effect = new Pw.Effect().spring()
+
+  // add effect to target
+  for(let i=0; i<nodes.length; i++){
+    // make spring by three control points on center node of a circle
+    effect.addNode(circleNode, nodes[i])
+  }
+  // play
+  effect.play(1000)
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

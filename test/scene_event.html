@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>scene event</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+  const scene2 = new Pw.Scene()
+  scene2.visible = false
+
+  for(let i= 0; i<100; i++){
+    const node = new Pw.Node()
+    node.setLocation(Math.random() * stage.width, Math.random()*stage.height)
+
+    node.fillStyle = Math.floor(Math.random() * 255)
+      + ',' + Math.floor(Math.random() * 255)
+      + ',' + Math.floor(Math.random() * 255)
+
+    if(i % 2 == 0){
+      scene.add(node)
+    }else{
+      scene2.add(node)
+    }
+  }
+
+  stage.add(scene)
+  stage.add(scene2)
+
+  function changeScene(){
+    if(scene.visible){
+      scene2.visible = true
+      scene.visible = false
+    }else{
+      scene2.visible = false
+      scene.visible = true
+    }
+  }
+  stage.addEventListener('click', function(event){
+    changeScene()
+  })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

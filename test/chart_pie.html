@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>pie chart</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  scene.background = './img/bg.jpg'
+
+  const node = new Pw.PieChartNode()
+
+  node.shadow = false
+  node.radius = 100
+  node.colors = ['#3666b0',"#2CA8E0","#77D1F6"]
+  node.datas=[.3,.3,.4]
+  node.titles = ['A','B', 'C']
+  node.setLocation(300, 203)
+  scene.add(node)
+
+  function f(n){
+    if(n > 20) return
+    node.datas[1] += 0.01
+    node.datas[2] -= 0.01
+
+    setTimeout(function(){
+      f(n+1)
+    }, 100)
+  }
+  f(0)
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

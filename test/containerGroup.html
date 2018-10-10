@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>container group</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene()
+  scene.background = './img/bg.jpg'
+  stage.add(scene)
+
+  const container = new Pw.Container('边界自动变化')
+
+  container.textPosition = 'Middle_Center'
+  container.fontColor = '255, 255, 255'
+  container.font = '18px serif'
+  container.borderColor = '255, 0, 0'
+  container.borderRadius = 30
+
+  scene.add(container)
+
+  for (let i = 0; i < 5; i++) {
+    const node = new Pw.Node("A_" + i)
+    node.textPosition = "Middle_Center"
+    node.setLocation(300 + Math.random() * 300, 200 + Math.random() * 200)
+    scene.add(node)
+    container.add(node)
+  }
+
+  scene.add(new Pw.Link(container.childs[0], container.childs[1]))
+  scene.add(new Pw.Link(container.childs[2], container.childs[3]))
+
+  const flowLayout = Pw.Layout.FlowLayout(10, 10)
+
+  const gridLayout = Pw.Layout.GridLayout(4, 3)
+
+  const container2 = new Pw.Container('点击切换布局')
+  container2.layout = flowLayout
+  container2.fillColor = '10,10,100'
+  container2.setBound(10, 10, 300, 200)
+  scene.add(container2)
+
+  for (let i = 0; i < 12; i++) {
+    const node = new Pw.Node("F_" + i)
+    node.textPosition = "Middle_Center"
+    scene.add(node)
+    container2.add(node)
+  }
+
+  container2.click(function () {
+    console.log('container2 was clicked!')
+    if (container2.layout === flowLayout) {
+      container2.layout = gridLayout
+    } else {
+      container2.layout = flowLayout
+    }
+  })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

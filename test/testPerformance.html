@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>test performance</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+  scene.background = './img/bg.jpg'
+
+  const nodeCount = 10000
+
+  function randomCoor(range) {
+    return Math.random() * range - Math.random() * range
+  }
+
+  function createNode(x, y, text) {
+    const node = new Pw.CircleNode()
+
+    node.radius = 10
+    node.shadow = false
+    node.tip = text
+    node.mouseover(function () {
+      this.text = this.tip
+    })
+    node.mouseout(function () {
+      this.text = ''
+    })
+    node.setSize(20, 20)
+    node.setLocation(x, y)
+    node.fillColor = Pw.util.randomColor()
+    scene.add(node)
+
+    return node
+  }
+
+  const beginTime = (new Date()).getTime()
+
+  for (let i = 0; i < nodeCount / 2; i++) {
+    let x = randomCoor(3000)
+    let y = randomCoor(3000)
+    const nodeFrom = createNode(x, y, 'From_' + i)
+    let x2 = x + randomCoor(1000)
+    let y2 = y + randomCoor(1000)
+    const nodeTo = createNode(x2, y2, 'To_' + i)
+    const link = new Pw.Link(nodeFrom, nodeTo)
+    link.shadow = false
+    link.lineWidth = 1
+    scene.add(link)
+  }
+
+  const usedTime = ((new Date()).getTime() - beginTime) / 1000
+
+  console.log('随机生成1万个节点、5000条连线, 用时：' + usedTime + ' 秒.')
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

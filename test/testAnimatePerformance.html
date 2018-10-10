@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>test animate performance</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  scene.background = './img/bg.jpg'
+
+  const nodeCount = 3000
+
+  function randomColor(range) {
+    return Math.random() * range - Math.random() * range
+  }
+
+  function createNode(x, y, text) {
+    const node = new Pw.Node()
+
+    node.radius = 4
+    node.showSelected = false
+    node.shadow = false
+    node.setSize(12, 12)
+    node.textPosition = 'Middle_Center'
+    node.alpha = Math.random()
+    node.setLocation(x, y)
+    node.fillColor = '255,255,255'
+    scene.add(node)
+
+    if (Math.random() < .1) {
+      if (Math.random() < .3) {
+        node.setImage('./img/logo.png')
+      }
+      new Pw.Animate()
+        .stepByStep(node, {
+          alpha: .1,
+          rotate: (Math.random() - Math.random()) * 2 * Math.PI,
+          scaleX: Math.random() * 10,
+          scaleY: Math.random() * 10
+        }, 1000 + 4000 * Math.random(), true)
+        .start()
+    }
+
+    if (Math.random() < .06) {
+      node.fillColor = '255,0,0'
+    }
+
+    return node
+  }
+
+  const beginTime = (new Date()).getTime()
+  let r = 25
+  let angle = 0
+  let da = .1
+  let rootNode = null
+
+  for (let i=0; i<nodeCount;i++) {
+    let x = canvas.width/2 +r*Math.cos(angle)
+    let y = canvas.height/2 + r*.7*Math.sin(angle)
+
+    const nodeFrom = createNode(x,y,i)
+
+    let x2 = x +5 +10 * Math.random()
+    let y2 = y
+    const nodeTo= createNode(x2,y2,i)
+
+    angle +=da
+    r+=.5
+
+    if (angle>2*Math.PI) {
+      angle = 0
+      da -= Math.random()
+
+      if (Math.random() > .5) {
+        da= -da
+      }
+    }
+  }
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

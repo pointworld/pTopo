@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>gravity effect</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  scene.shadow = false
+
+  scene.background = './img/bg.jpg'
+
+  for (let i = 0; i < 200; i++) {
+    const node = new Pw.Node()
+    node.rotate = Math.random()
+    node.scaleX = Math.random()
+    node.scaleY = Math.random()
+    node.alpha = Math.random()
+    node.setLocation(Math.random() * canvas.width, Math.random() * canvas.height)
+    node.fillColor = Pw.util.randomColor()
+    scene.add(node)
+  }
+
+  scene.click(function (event) {
+    scene.childs.forEach(function (node) {
+      new Pw.Effect()
+        .gravity(node, {
+          dx: 5 * Math.random() - 5 * Math.random(),
+          dy: 10 * Math.random() - 10 * Math.random(),
+          stop: function () {
+            // 终止条件
+            return node.y + node.height > canvas.height
+          }
+        })
+        .onStop(function () {
+          // 停止
+          //console.log(n)
+        })
+        .start()
+    })
+  })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

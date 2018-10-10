@@ -1,0 +1,47 @@
+{
+  "name": "pw-jtopo",
+  "version": "1.0.0",
+  "description": "a topo frame based on canvas",
+  "main": "index.js",
+  "scripts": {
+    "dev": "rollup -c scripts/config.js",
+    "dev:watch": "rollup -c scripts/config.js --watch",
+    "dev:cjs": "rollup -c scripts/config.js",
+    "dev:esm": "rollup -c scripts/config.js",
+    "build": "node script/build.js",
+    "prod": "rollup -c scripts/config.js",
+    "flow": "flow check",
+    "release": "bash scripts/release.sh",
+    "npm@*+.0.0": "npm version major && npm publish && git push && git push origin --tags",
+    "npm@0.*+.0": "npm version minor && npm publish && git push && git push origin --tags",
+    "npm@0.0.*+": "npm version patch && npm publish && git push && git push origin --tags",
+    "npm@0.0.0.*+": "npm version prerelease && npm publish --tag=beta && git push && git push origin --tags"
+  },
+  "keywords": [
+    "topo",
+    "canvas",
+    "pw"
+  ],
+  "author": "point <https://github.com/pointworld/>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pointworld/pw-jtopo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pointworld/pw-jtopo/issues"
+  },
+  "homepage": "https://github.com/pointworld/pw-jtopo#readme",
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/plugin-external-helpers": "^7.0.0",
+    "@babel/plugin-transform-parameters": "^7.1.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-preset-latest": "^6.24.1",
+    "rollup": "^0.66.2",
+    "rollup-plugin-babel": "^4.1.0-0",
+    "rollup-plugin-commonjs": "^9.1.8",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-resolve": "^3.4.0"
+  }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>matrix</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene()
+
+  scene.background = './img/bg.jpg'
+
+  function randomIP() {
+    function num() {
+      return Math.floor(Math.random() * 255)
+    }
+
+    return num() + '.' + num() + '.' + num() + '.' + num()
+  }
+
+  const icons = ['green', 'blue', 'gray']
+
+  function node(x, y) {
+    const node = new Pw.Node(randomIP())
+    node.setImage('./img/p.png', true)
+    node.setLocation(x, y)
+    scene.add(node)
+    if (Math.random() < .2) {
+      node.alarm = '1 M'
+    }
+
+    return node
+  }
+
+  function linkNode(nodeA, nodeZ) {
+    const link = new Pw.Link(nodeA, nodeZ)
+    link.strokeColor = '204,204,204'
+    link.lineWidth = 1
+    scene.add(link)
+    return link
+  }
+
+  const nodes = []
+  for (let i = 0; i < 10; i++) {
+    const row = []
+    for (let j = 0; j < 10; j++) {
+      const n = node(20 + j * 120, 20 + i * 120)
+      row.push(n)
+      if (j > 0) {
+        linkNode(n, row[j - 1])
+        if (i > 0) {
+          linkNode(nodes[i - 1][j], row[j])
+        }
+      }
+      if (i > 0 && j == 0) {
+        linkNode(nodes[i - 1][j], row[j])
+      }
+    }
+    nodes.push(row)
+  }
+  stage.add(scene)
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>relationship of devices</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  scene.background = './img/bg.jpg'
+
+  function node(x, y, img) {
+    const node = new Pw.Node()
+
+    node.setImage('./img/' + img, true)
+    node.setLocation(x, y)
+    scene.add(node)
+
+    return node
+  }
+
+  function linkNode(nodeA, nodeZ, f) {
+    let link
+
+    if (f) {
+      link = new Pw.FoldLink(nodeA, nodeZ)
+    } else {
+      link = new Pw.Link(nodeA, nodeZ)
+    }
+
+    link.direction = 'vertical'
+    scene.add(link)
+    return link
+  }
+
+  const p1 = node(305, 43, 'black.png')
+  p1.alarm = '2 W'
+  const p2 = node(365, 43, 'black.png')
+  const p3 = node(425, 43, 'black.png')
+
+  const black1 = node(365, 125, 'black.png')
+  linkNode(p1, black1, true)
+  linkNode(p2, black1, true)
+  linkNode(p3, black1, true)
+
+  const vue1 = node(365, 214, 'black.png')
+  linkNode(black1, vue1)
+
+  const vue2 = node(365, 259, 'black.png')
+  linkNode(vue1, vue2)
+
+  const black2 = node(365, 328, 'black.png')
+  linkNode(vue2, black2)
+
+  const vue3 = node(365, 377, 'black.png')
+  linkNode(black2, vue3)
+
+  const vue4 = node(365, 411, 'black.png')
+  linkNode(vue3, vue4)
+
+  function hostLink(nodeA, nodeZ) {
+    const link = new Pw.FlexionalLink(nodeA, nodeZ)
+    link.shadow = false
+    link.offsetGap = 44
+    scene.add(link)
+    return link
+  }
+
+  const h1 = node(218, 520, 'black.png')
+  h1.alarm = ''
+
+  hostLink(vue4, h1)
+
+  const h2 = node(292, 520, 'black.png')
+  hostLink(vue4, h2)
+
+  const h3 = node(366, 520, 'black.png')
+  h3.alarm = 'alarm'
+  hostLink(vue4, h3)
+
+  const h4 = node(447, 520, 'black.png')
+  hostLink(vue4, h4)
+
+  const h5 = node(515, 520, 'black.png')
+  h5.alarm = '1M'
+  hostLink(vue4, h5)
+
+  setInterval(function () {
+    if (h3.alarm == 'alarm') {
+      h3.alarm = null
+    } else {
+      h3.alarm = 'alarm'
+    }
+  }, 600)
+
+  stage.add(scene)
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

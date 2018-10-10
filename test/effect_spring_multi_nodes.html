@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>multi-nodes spring effect</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene()
+
+  scene.shadow = true
+  scene.background = './img/bg.jpg'
+  stage.add(scene)
+
+  const nodes = []
+
+  for (let i = 0; i < 9; i++) {
+    const x = Math.ceil(Math.random() * 600)
+    const y = Math.ceil(Math.random() * 400)
+    const node = new Pw.CircleNode()
+    node.radius = 25
+    node.fillColor  = Pw.util.randomColor()
+    node.setLocation(x, y)
+    scene.add(node)
+    nodes.push(node)
+  }
+
+  const links = []
+  for (let i = 1; i < nodes.length; i++) {
+    const link = new Pw.Link(nodes[i - 1], nodes[i])
+    link.strokeColor = Pw.util.randomColor()
+    link.lineWidth = Math.ceil(15 * Math.random()) + 1
+    scene.add(link)
+    links.push(link)
+  }
+
+  // link first and last
+  const link = new Pw.Link(nodes[nodes.length - 1], nodes[0])
+  link.strokeColor = Pw.util.randomColor()
+  link.lineWidth = Math.ceil(15 * Math.random()) + 1
+  scene.add(link)
+  links.push(link)
+
+  // define effect
+  const effect = new Pw.Effect()
+    .spring({
+      minLength: 200
+    })
+
+  // add effect to target
+  for (let i = 1; i < nodes.length; i++) {
+    // make effect each other
+    effect.addNode(nodes[i - 1], nodes[i])
+    effect.addNode(nodes[i], nodes[i - 1])
+  }
+
+  // play
+  effect.play(1000)
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

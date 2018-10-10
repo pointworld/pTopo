@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+  <script src="../dist/pw.js"></script>
+  <style>
+    #canvas {
+      margin-left: 50px;
+      margin-top: 50px;
+      border: 2px solid red;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="350"></canvas>
+
+<script>
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  function newNode(x, y, w, h, text) {
+    const node = new Pw.Node(text)
+
+    node.setLocation(x,y)
+    node.setSize(w,h)
+    scene.add(node)
+
+    return node
+  }
+
+  function newLink(nodeA, nodeZ, text, dashedPattern) {
+    const link = new Pw.Link(nodeA, nodeZ, text)
+
+    link.lineWidth = 3
+    link.offsetGap = 35
+    link.bundleOffset = 60
+    link.bundleGap = 20
+    link.textOffsetY = 3
+    link.strokeColor = '0,200,255'
+    link.dashedPattern = dashedPattern
+
+    scene.add(link)
+
+    return link
+  }
+
+  const from = newNode(100, 60, 30, 30, 'p')
+  const to = newNode(300, 60, 30, 30, 'w')
+  const link = newLink(from, to, 'pw')
+
+  stage.add(scene)
+
+</script>
+</body>
+</html>
