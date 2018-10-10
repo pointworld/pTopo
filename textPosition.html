@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>text position</title>
+  <script src="./js/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+  scene.background = './img/bg.jpg'
+
+  const ps = ['Top_Left', 'Top_Center', 'Top_Right', 'Middle_Left', 'Middle_Center'
+    , 'Middle_Right', 'Bottom_Left', 'Bottom_Center', 'Bottom_Right']
+
+  let n = 0
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      let text = ps[n]
+      let position = ps[n++]
+      const circleNode = new Pw.Node(text)
+
+      circleNode.setSize(40, 40)
+      circleNode.fontColor = '255,255,255'
+      circleNode.fillColor = '0, 0, 255'
+      circleNode.setLocation(200 + j * 140, 100 + i * 140)
+      circleNode.textPosition = position
+      scene.add(circleNode)
+    }
+  }
+
+  const circleNode1 = new Pw.CircleNode('left-bottom offset')
+
+  circleNode1.fillColor = '0,0,0'
+  circleNode1.setLocation(750, 200)
+  circleNode1.fontColor = '255,255,255'
+  circleNode1.textPosition = 'Middle_Center'
+  circleNode1.textOffsetX = -30
+  circleNode1.textOffsetY = 30
+
+  scene.add(circleNode1)
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

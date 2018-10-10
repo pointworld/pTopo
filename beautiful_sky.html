@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>beautiful sky</title>
+  <script src="./js/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene()
+
+  scene.shadow = true
+  scene.backgroundColor = '0,0,0'
+  // scene.background = './img/bg.jpg'
+  scene.alpha = 1
+  stage.add(scene)
+
+  const nodes = []
+
+  function create_node() {
+    const x = Math.random() * stage.width
+    const y = Math.random() * stage.height
+    const node = new Pw.CircleNode()
+    node.vx = Math.random() * 6 - 3
+    node.vy = Math.random() * 6 - 3
+    node.radius = Math.random() * 10 + 2
+    node.mass = node.radius
+    node.fillColor = Pw.util.randomColor()
+    node.setLocation(x, y)
+    scene.add(node)
+    return node
+  }
+
+  for (let i = 0; i < 90; i++) {
+    const node = create_node()
+    nodes.push(node)
+  }
+
+  function move(node) {
+    node.x += node.vx
+    node.y += node.vy
+    if (node.x > stage.width) node.x = 0
+    if (node.y > stage.height) node.y = 0
+    if (node.x - node.width < 0) node.x = stage.width * Math.random()
+    if (node.y - node.height < 0) node.y = stage.height * Math.random()
+  }
+
+  const minDist = 100
+  const springAmount = .0025
+
+  function spring(a, b) {
+    const dx = b.x - a.x
+    const dy = b.y - a.y
+
+    const dist = Pw.util.getDistance(a, b)
+
+    if (dist < minDist) {
+      const g = stage.graphics
+      const alpha = 1 - dist / minDist
+      g.beginPath()
+      g.strokeStyle = 'rgba(255,255,255,' + alpha + ')'
+      g.lineWidth = 1
+      g.moveTo(a.x + a.width / 2, a.y + a.height / 2)
+      g.lineTo(b.x + b.width / 2, b.y + b.height / 2)
+      g.stroke()
+      g.closePath()
+      const ax = dx * springAmount
+      const ay = dy * springAmount
+      a.x += ax / a.mass
+      a.y += ay / a.mass
+      b.x -= ax / b.mass
+      b.y -= ay / b.mass
+    }
+  }
+
+  (function f() {
+    stage.paint()
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = 0; j < nodes.length; j++) {
+        if (j == i) continue
+        spring(nodes[i], nodes[j])
+      }
+      move(nodes[i])
+    }
+
+    requestAnimationFrame(f)
+  })()
+
+  stage.addEventListener('mouseup', function (e) {
+    var node = create_node()
+    node.setLocation(e.x, e.y)
+    nodes.push(node)
+  })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>auto tree layout</title>
+  <script src="./js/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+  scene.alpha = 1
+
+  // scene.background = './img/bg.jpg'
+
+  function addNode(text) {
+    const node = new Pw.Node()
+    node.setImage('./img/p.png', true)
+    node.fontColor = '0,0,0'
+    scene.add(node)
+
+    node.mouseover(function () {
+      this.text = text
+    })
+
+    node.mouseout(function () {
+      this.text = null
+    })
+    return node
+  }
+
+  function addLink(nodeA, nodeZ) {
+    const link = new Pw.FlexionalLink(nodeA, nodeZ)
+    link.strokeColor = '204,204,204'
+    link.lineWidth = 1
+    scene.add(link)
+    return link
+  }
+
+  const rootNode = addNode('root', 'gray')
+
+  for (let i = 0; i < 4; i++) {
+    const node = addNode('second_' + i)
+    addLink(rootNode, node)
+    if (i === 0 || i === 3) {
+      for (let j = 0; j < 4; j++) {
+        const thirdNode = addNode('third_' + j)
+        addLink(node, thirdNode)
+
+        if (j === 3) {
+          for (let k = 0; k < 4; k++) {
+            const kNode = addNode('leaf_' + k)
+            addLink(thirdNode, kNode)
+          }
+        }
+      }
+    }
+  }
+  scene.doLayout(Pw.Layout.TreeLayout('down', 30, 107))
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

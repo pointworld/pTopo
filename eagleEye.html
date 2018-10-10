@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>eagle eye</title>
+  <script src="./js/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  stage.eagleEye.visible = true
+
+  scene.backgroundColor = '0,200,0'
+  scene.background = './img/bg.jpg'
+  scene.alpha = .1
+
+  for (let i=0; i<500; i++) {
+    const node = new Pw.Node('' + i)
+
+    node.shadow = false
+    node.setSize(30,30)
+    node.rotate = Math.random()
+    node.textPosition = 'Middle_Center'
+
+    let s= 2
+    let x = Math.random()*stage.width *s -Math.random()*stage.width*s
+    let y = Math.random()*stage.height *s -Math.random()*stage.height*s
+    node.setLocation(x,y)
+    node.fillColor = Pw.util.randomColor()
+
+    scene.add(node)
+  }
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

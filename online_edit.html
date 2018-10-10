@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>online edit</title>
+  <script src="./js/pw.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  canvas.width = document.documentElement.clientWidth - 10
+  canvas.height = document.documentElement.clientHeight - 10
+
+  window.addEventListener('resize', function () {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+  })
+
+  const stage = new Pw.Stage(canvas)
+  const scene = new Pw.Scene(stage)
+
+  scene.background = './img/bg.jpg'
+
+  const msgNode = new Pw.TextNode("点击节点可连线(连个节点)")
+  msgNode.zIndex++
+  msgNode.setBound(250, 50)
+  scene.add(msgNode)
+
+  for (let i = 0; i < 5; i++) {
+    const node = new Pw.Node('Node_' + i)
+    node.setLocation(Math.random() * 600, Math.random() * 400)
+    scene.add(node)
+  }
+
+
+  let beginNode = null
+  const tempNodeA = new Pw.Node('tempA')
+  tempNodeA.setSize(1, 1)
+
+  const tempNodeZ = new Pw.Node('tempZ')
+  tempNodeZ.setSize(1, 1)
+
+  const link = new Pw.Link(tempNodeA, tempNodeZ)
+
+  scene.mouseup(function (e) {
+    if (e.button === 2) {
+      scene.remove(link)
+      return
+    }
+    if (e.target && e.target instanceof Pw.Node) {
+      if (!beginNode) {
+        beginNode = e.target
+        scene.add(link)
+        tempNodeA.setLocation(e.x, e.y)
+        tempNodeZ.setLocation(e.x, e.y)
+      } else if (beginNode !== e.target) {
+        let endNode = e.target
+        const l = new Pw.Link(beginNode, endNode)
+        scene.add(l)
+        beginNode = null
+        scene.remove(link)
+      } else {
+        beginNode = null
+      }
+    } else {
+      scene.remove(link)
+    }
+  })
+
+  scene.mousedown(function (e) {
+    if (!e.target || e.target === beginNode || e.target === link) {
+      scene.remove(link)
+    }
+  })
+  scene.mousemove(function (e) {
+    tempNodeZ.setLocation(e.x, e.y)
+  })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
