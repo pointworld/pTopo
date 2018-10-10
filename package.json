@@ -1,6 +1,6 @@
 {
   "name": "ptopo",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "a topo frame based on canvas",
   "main": "dist/pTopo.js",
   "scripts": {
