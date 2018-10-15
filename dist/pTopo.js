@@ -1400,45 +1400,41 @@
   function (_InteractiveElement) {
     _inherits(Link, _InteractiveElement);
 
-    function Link(nodeA, nodeZ, text) {
+    function Link(nodeA, nodeZ, text, opts) {
       var _this;
 
       _classCallCheck(this, Link);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(Link).call(this, nodeA, nodeZ, text));
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(Link).call(this, nodeA, nodeZ, text, opts));
       _this.elementType = "link";
       _this.zIndex = zIndex_Link;
+      _this.text = text;
+      _this.nodeA = nodeA;
+      _this.nodeA && !_this.nodeA.inLinks && (_this.nodeA.inLinks = []);
+      _this.nodeA && !_this.nodeA.outLinks && (_this.nodeA.outLinks = []);
+      _this.nodeA && _this.nodeA.outLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
+      _this.nodeZ = nodeZ;
+      _this.nodeZ && !_this.nodeZ.inLinks && (_this.nodeZ.inLinks = []);
+      _this.nodeZ && !_this.nodeZ.outLinks && (_this.nodeZ.outLinks = []);
+      _this.nodeZ && _this.nodeZ.inLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
 
-      if (arguments.length) {
-        _this.text = text;
-        _this.nodeA = nodeA;
-        _this.nodeA && !_this.nodeA.inLinks && (_this.nodeA.inLinks = []);
-        _this.nodeA && !_this.nodeA.outLinks && (_this.nodeA.outLinks = []);
-        _this.nodeA && _this.nodeA.outLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
-        _this.nodeZ = nodeZ;
-        _this.nodeZ && !_this.nodeZ.inLinks && (_this.nodeZ.inLinks = []);
-        _this.nodeZ && !_this.nodeZ.outLinks && (_this.nodeZ.outLinks = []);
-        _this.nodeZ && _this.nodeZ.inLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
+      _this.caculateIndex();
 
-        _this.caculateIndex();
-
-        _this.font = "12px Consolas";
-        _this.fontColor = "255,255,255";
-        _this.lineWidth = 2;
-        _this.lineJoin = "miter";
-        _this.transformAble = false;
-        _this.bundleOffset = 20;
-        _this.bundleGap = 12;
-        _this.textOffsetX = 0;
-        _this.textOffsetY = 0;
-        _this.arrowsRadius = null;
-        _this.arrowsOffset = 0;
-        _this.dashedPattern = null;
-        _this.path = [];
-        var keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",");
-        _this.serializedProperties = _this.serializedProperties.concat(keysArr);
-      }
-
+      _this.font = opts.font || "12px Consolas";
+      _this.fontColor = opts.fontColor || "255,255,255";
+      _this.lineWidth = opts.lineWidth || 2;
+      _this.lineJoin = opts.lineJoin || "miter";
+      _this.transformAble = false;
+      _this.bundleOffset = opts.bundleOffset || 20;
+      _this.bundleGap = opts.bundleGap || 12;
+      _this.textOffsetX = opts.textOffsetX || 0;
+      _this.textOffsetY = opts.textOffsetY || 0;
+      _this.arrowsRadius = opts.arrowsRadius || null;
+      _this.arrowsOffset = opts.arrowsOffset || 0;
+      _this.dashedPattern = opts.dashedPattern || null;
+      _this.path = opts.path || [];
+      var keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",");
+      _this.serializedProperties = _this.serializedProperties.concat(keysArr);
       return _this;
     }
 

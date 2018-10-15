@@ -4,40 +4,38 @@ import {getIntersectionPointObj, unsharedLinks, getSharedLinksLen} from './util'
 import {zIndex_Link} from "../../shared/constants"
 
 export default class Link extends InteractiveElement {
-  constructor(nodeA, nodeZ, text) {
-    super(nodeA, nodeZ, text)
+  constructor(nodeA, nodeZ, text, opts) {
+    super(nodeA, nodeZ, text, opts)
 
     this.elementType = "link"
     this.zIndex = zIndex_Link
+    this.text = text
+    this.nodeA = nodeA
+    this.nodeA && !this.nodeA.inLinks && (this.nodeA.inLinks = [])
+    this.nodeA && !this.nodeA.outLinks && (this.nodeA.outLinks = [])
+    this.nodeA && this.nodeA.outLinks.push(this)
+    this.nodeZ = nodeZ
+    this.nodeZ && !this.nodeZ.inLinks && (this.nodeZ.inLinks = [])
+    this.nodeZ && !this.nodeZ.outLinks && (this.nodeZ.outLinks = [])
+    this.nodeZ && this.nodeZ.inLinks.push(this)
+    this.caculateIndex()
+    this.font = opts.font || "12px Consolas"
+    this.fontColor = opts.fontColor || "255,255,255"
+    this.lineWidth = opts.lineWidth || 2
+    this.lineJoin = opts.lineJoin || "miter"
+    this.transformAble = false
+    this.bundleOffset = opts.bundleOffset || 20
+    this.bundleGap = opts.bundleGap || 12
+    this.textOffsetX = opts.textOffsetX || 0
+    this.textOffsetY = opts.textOffsetY || 0
+    this.arrowsRadius = opts.arrowsRadius || null
+    this.arrowsOffset = opts.arrowsOffset || 0
+    this.dashedPattern = opts.dashedPattern || null
+    this.path = opts.path || []
 
-    if (arguments.length) {
-      this.text = text
-      this.nodeA = nodeA
-      this.nodeA && !this.nodeA.inLinks && (this.nodeA.inLinks = [])
-      this.nodeA && !this.nodeA.outLinks && (this.nodeA.outLinks = [])
-      this.nodeA && this.nodeA.outLinks.push(this)
-      this.nodeZ = nodeZ
-      this.nodeZ && !this.nodeZ.inLinks && (this.nodeZ.inLinks = [])
-      this.nodeZ && !this.nodeZ.outLinks && (this.nodeZ.outLinks = [])
-      this.nodeZ && this.nodeZ.inLinks.push(this)
-      this.caculateIndex()
-      this.font = "12px Consolas"
-      this.fontColor = "255,255,255"
-      this.lineWidth = 2
-      this.lineJoin = "miter"
-      this.transformAble = false
-      this.bundleOffset = 20
-      this.bundleGap = 12
-      this.textOffsetX = 0
-      this.textOffsetY = 0
-      this.arrowsRadius = null
-      this.arrowsOffset = 0
-      this.dashedPattern = null
-      this.path = []
+    const keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",")
+    this.serializedProperties = this.serializedProperties.concat(keysArr)
 
-      const keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",")
-      this.serializedProperties = this.serializedProperties.concat(keysArr)
-    }
   }
 
   caculateIndex() {
