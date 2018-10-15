@@ -1,5 +1,5 @@
 /*!
- * pTopo.js v0.0.0
+ * pTopo.js v0.0.6
  * (c) 2018-2018 Point
  * Released under the MIT License.
  */
@@ -4857,7 +4857,7 @@
     return Scene;
   }(Element);
 
-  var version = "0.0.0";
+  var version = "0.0.6";
 
   var Stage =
   /*#__PURE__*/
@@ -5581,14 +5581,26 @@
           scenes = this.childs;
           scenes1 = scenes1.concat(scenes);
         } else {
-          this instanceof Scene ? scenes = [this] : scenes1 = this;
-          scenes.forEach(function (a) {
-            scenes1 = scenes1.concat(a.childs);
-          });
+          if (this instanceof Scene) {
+            scenes = [this];
+          } else {
+            scenes1 = this;
+            scenes.forEach(function (a) {
+              scenes1 = scenes1.concat(a.childs);
+            });
+          }
         }
 
-        var filteredScenes = "function" === typeof cbOrCond ? scenes1.filter(cbOrCond) : getFilteredScenes(scenes1, cbOrCond);
-        return getFinalFilteredScenes(filteredScenes);
+        var filteredScenes;
+
+        if ("function" === typeof cbOrCond) {
+          filteredScenes = scenes1.filter(cbOrCond);
+        } else {
+          getFilteredScenes(scenes1, cbOrCond);
+          filteredScenes = getFinalFilteredScenes(filteredScenes);
+        }
+
+        return filteredScenes;
       })
     }, {
       key: "click",
