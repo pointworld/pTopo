@@ -1,7 +1,7 @@
 import InteractiveElement from './InteractiveElement'
 import {SceneMode} from "../../shared/constants"
 
-const posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Top", "Bottom_Right"]
+const posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Right"]
 
 export default class EditableElement extends InteractiveElement {
   constructor() {

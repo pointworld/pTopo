@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>hello world</title>
-  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -11,8 +10,13 @@
       overflow: hidden;
     }
   </style>
+  <script src="./js/jquery.js"></script>
+  <script src="./js/toolbar.js"></script>
+  <script src="../dist/pTopo.js"></script>
+  <!--<script src="./js/pTopo.js"></script>-->
 </head>
 <body>
+<div id="content"></div>
 <canvas id="canvas" width="500" height="350"></canvas>
 
 <script>
@@ -26,6 +30,8 @@
 
   const stage = new PTopo.Stage(canvas)
   const scene = new PTopo.Scene(stage)
+
+  showJTopoToobar(stage)
   scene.background = './img/bg.jpg'
 
   function newNode(x, y, w, h, text) {

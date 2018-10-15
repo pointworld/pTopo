@@ -1,5 +1,5 @@
 /*!
- * pTopo.js v0.0.0
+ * pTopo.js v0.0.6
  * (c) 2018-2018 Point
  * Released under the MIT License.
  */
@@ -480,24 +480,24 @@
             y = boundObj.top;
             break;
 
-          case 'Top_right':
+          case 'Top_Right':
             x = boundObj.right;
             y = boundObj.top;
             break;
 
-          case 'Middle_left':
+          case 'Middle_Left':
             x = boundObj.left;
-            y = boundObj.cy;
+            y = this.cy;
             break;
 
           case 'Middle_Center':
-            x = boundObj.cx;
-            y = boundObj.cy;
+            x = this.cx;
+            y = this.cy;
             break;
 
           case 'Middle_Right':
             x = boundObj.right;
-            y = boundObj.cy;
+            y = this.cy;
             break;
 
           case 'Bottom_Left':
@@ -825,7 +825,7 @@
     move: "move"
   };
 
-  var posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Top", "Bottom_Right"];
+  var posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Right"];
 
   var EditableElement =
   /*#__PURE__*/
@@ -3984,7 +3984,7 @@
       _this.mouseDownX = null;
       _this.mouseDownY = null;
       _this.mouseDownEvent = null;
-      _this.areaSelect = false;
+      _this.areaSelect = true;
       _this.operations = [];
       _this.selectedElements = [];
       _this.paintAll = false;
@@ -4345,32 +4345,39 @@
         this.mouseDownY = e.y;
         this.mouseDownEvent = e;
 
-        if (this.mode === SceneMode.normal) {
-          this.selectElement(e);
-
-          if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
-            this.lastTranslateX = this.translateX;
-            this.lastTranslateY = this.translateY;
-          }
-        } else {
-          if (this.mode === SceneMode.drag && this.translate) {
-            this.lastTranslateX = this.translateX;
-            this.lastTranslateY = this.translateY;
-            return;
-          }
-
-          if (this.mode === SceneMode.select) {
+        switch (this.mode) {
+          case SceneMode.normal:
             this.selectElement(e);
-          } else {
-            if (this.mode === SceneMode.edit) {
-              this.selectElement(e);
 
-              if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
-                this.lastTranslateX = this.translateX;
-                this.lastTranslateY = this.translateY;
-              }
+            if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
             }
-          }
+
+            break;
+
+          case SceneMode.drag:
+            if (this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
+              return;
+            }
+
+            break;
+
+          case SceneMode.select:
+            this.selectElement(e);
+            break;
+
+          case SceneMode.edit:
+            this.selectElement(e);
+
+            if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
+            }
+
+            break;
         }
 
         this.dispatchEvent("mousedown", e);
@@ -4857,7 +4864,7 @@
     return Scene;
   }(Element);
 
-  var version = "0.0.0";
+  var version = "0.0.6";
 
   var Stage =
   /*#__PURE__*/

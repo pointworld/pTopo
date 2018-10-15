@@ -43,7 +43,7 @@ export default class Scene extends Element {
     this.mouseDownX = null
     this.mouseDownY = null
     this.mouseDownEvent = null
-    this.areaSelect = false
+    this.areaSelect = true
     this.operations = []
     this.selectedElements = []
     this.paintAll = false
@@ -428,45 +428,42 @@ export default class Scene extends Element {
     this.mouseDownY = e.y
     this.mouseDownEvent = e
 
-    if (this.mode === SceneMode.normal) {
-      this.selectElement(e)
-
-      if (
-        !this.currentElement
-        || this.currentElement instanceof Link
-        && this.translate
-      ) {
-        this.lastTranslateX = this.translateX
-        this.lastTranslateY = this.translateY
-      }
-    }
-    else {
-      if (
-        this.mode === SceneMode.drag
-        && this.translate
-      ) {
-        this.lastTranslateX = this.translateX
-        this.lastTranslateY = this.translateY
-        return
-      }
-
-      if (this.mode === SceneMode.select) {
+    switch (this.mode) {
+      case SceneMode.normal:
         this.selectElement(e)
-      }
-      else {
-        if (this.mode === SceneMode.edit) {
-          this.selectElement(e)
 
-          if (
-            !this.currentElement
-            || this.currentElement instanceof Link
-            && this.translate
-          ) {
-            this.lastTranslateX = this.translateX
-            this.lastTranslateY = this.translateY
-          }
+        if (
+          !this.currentElement
+          || this.currentElement instanceof Link
+          && this.translate
+        ) {
+          this.lastTranslateX = this.translateX
+          this.lastTranslateY = this.translateY
         }
-      }
+
+        break
+      case SceneMode.drag:
+        if (this.translate) {
+          this.lastTranslateX = this.translateX
+          this.lastTranslateY = this.translateY
+          return
+        }
+        break
+      case SceneMode.select:
+        this.selectElement(e)
+        break
+      case SceneMode.edit:
+        this.selectElement(e)
+
+        if (
+          !this.currentElement
+          || this.currentElement instanceof Link
+          && this.translate
+        ) {
+          this.lastTranslateX = this.translateX
+          this.lastTranslateY = this.translateY
+        }
+        break
     }
 
     this.dispatchEvent("mousedown", e)
