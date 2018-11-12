@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>link</title>
-  <script src="./js/pTopo.js"></script>
+  <!--<script src="./js/pTopo.js"></script>-->
+  <script src="../dist/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -106,27 +107,33 @@
   link_arrow.lineEndType = 'arrow'
   link_arrow.arrowsRadius = 10
 
-  const from2 = newNode(100, 120, 30, 30)
-  const to2 = newNode(300, 120, 30, 30)
-  const link2 = newLink(from2, to2, 'SolidCircle', 5)
-  link2.lineEndType = 'solidCircle'
-  link2.arrowsRadius = 10
+  const from_solidCircle = newNode(100, 120, 30, 30)
+  const to2_solidCircle = newNode(300, 120, 30, 30)
+  const link_solidCircle = newLink(from_solidCircle, to2_solidCircle, 'SolidCircle', 5)
+  link_solidCircle.lineEndType = 'solidCircle'
+  link_solidCircle.arrowsRadius = 10
 
-  const from3 = newNode(100, 200, 30, 30)
-  const to3 = newNode(200, 300, 30, 30)
+  const from_hollowCircle = newNode(100, 180, 30, 30)
+  const to_hollowCircle = newNode(300, 180, 30, 30)
+  const link_hollowCircle = newLink(from_hollowCircle, to_hollowCircle, 'HollowCircle', 5)
+  link_hollowCircle.lineEndType = 'hollowCircle'
+  link_hollowCircle.arrowsRadius = 10
+
+  const from3 = newNode(100, 240, 30, 30)
+  const to3 = newNode(200, 340, 30, 30)
   newFoldLink(from3, to3, 'FoldLink')
   newFoldLink(to3, from3, 'FoldLink', 'vertical', 5)
 
-  const from4 = newNode(100, 300, 30, 30)
-  const to4 = newNode(200, 400, 30, 30)
+  const from4 = newNode(100, 340, 30, 30)
+  const to4 = newNode(200, 440, 30, 30)
   newFoldLink(from4, to4, 'FoldLink', 'vertical')
 
-  const from5 = newNode(450, 250, 30, 30)
-  const to5 = newNode(400, 100, 30, 30)
+  const from5 = newNode(450, 290, 30, 30)
+  const to5 = newNode(400, 140, 30, 30)
   newFlexionalLink(from5, to5, 'FlexLink1')
 
-  const from6 = newNode(600, 100, 30, 30)
-  const to6 = newNode(650, 200, 30, 30)
+  const from6 = newNode(600, 140, 30, 30)
+  const to6 = newNode(650, 240, 30, 30)
   newFlexionalLink(from6, to6, 'f', 'vertical', 2)
 
   const from7 = newNode(450, 400, 30, 30);

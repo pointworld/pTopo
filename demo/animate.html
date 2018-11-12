@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>animate</title>
-  <script src="./js/pTopo.js"></script>
   <style>
     body {
       padding: 0;
@@ -11,10 +10,13 @@
       overflow: hidden;
     }
   </style>
+  <script src="./js/jquery.js"></script>
+  <script src="./js/toolbar.js"></script>
+  <script src="./js/pTopo.js"></script>
 </head>
 <body>
+<div id="content"></div>
 <canvas id="canvas"></canvas>
-
 <script>
   canvas.width = document.documentElement.clientWidth - 10
   canvas.height = document.documentElement.clientHeight - 10
@@ -27,6 +29,7 @@
   const stage = new PTopo.Stage(canvas)
   const scene = new PTopo.Scene(stage)
 
+  showJTopoToobar(stage)
   stage.frame = 24
   scene.background = './img/bg.jpg'
 

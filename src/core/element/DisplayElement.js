@@ -129,21 +129,21 @@ export default class DisplayElement extends Element {
         x = this.cx
         y = boundObj.top
         break
-      case 'Top_right':
+      case 'Top_Right':
         x = boundObj.right
         y = boundObj.top
         break
-      case 'Middle_left':
+      case 'Middle_Left':
         x = boundObj.left
-        y = boundObj.cy
+        y = this.cy
         break
       case 'Middle_Center':
-        x = boundObj.cx
-        y = boundObj.cy
+        x = this.cx
+        y = this.cy
         break
       case 'Middle_Right':
         x = boundObj.right
-        y = boundObj.cy
+        y = this.cy
         break
       case 'Bottom_Left':
         x = boundObj.left

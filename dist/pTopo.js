@@ -480,24 +480,24 @@
             y = boundObj.top;
             break;
 
-          case 'Top_right':
+          case 'Top_Right':
             x = boundObj.right;
             y = boundObj.top;
             break;
 
-          case 'Middle_left':
+          case 'Middle_Left':
             x = boundObj.left;
-            y = boundObj.cy;
+            y = this.cy;
             break;
 
           case 'Middle_Center':
-            x = boundObj.cx;
-            y = boundObj.cy;
+            x = this.cx;
+            y = this.cy;
             break;
 
           case 'Middle_Right':
             x = boundObj.right;
-            y = boundObj.cy;
+            y = this.cy;
             break;
 
           case 'Bottom_Left':
@@ -825,7 +825,7 @@
     move: "move"
   };
 
-  var posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Top", "Bottom_Right"];
+  var posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Right"];
 
   var EditableElement =
   /*#__PURE__*/
@@ -1411,6 +1411,8 @@
 
       if (arguments.length) {
         _this.lineEndType = null;
+        _this.lineEndOffset = 0;
+        _this.lineEndRadius = 0;
         _this.isDoubleLineEnd = false;
         _this.text = text;
         _this.nodeA = nodeA;
@@ -1570,6 +1572,10 @@
       key: "paintLineEnd",
       value: function paintLineEnd(ctx, p1, p2, lineEndType) {
         switch (lineEndType) {
+          case 'hollowCircle':
+            this.paintLineEndHollowCircle(ctx, p1, p2);
+            break;
+
           case 'solidCircle':
             this.paintLineEndSolidCircle(ctx, p1, p2);
             break;
@@ -1611,15 +1617,31 @@
     }, {
       key: "paintLineEndSolidCircle",
       value: function paintLineEndSolidCircle(ctx, p1, p2) {
-        var arrowsOffset = this.arrowsOffset || 0;
+        this.lineEndOffset = this.lineEndOffset || -5;
+        this.lineEndRadius = this.lineEndRadius || 5;
         var i = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-        var x = p2.x + arrowsOffset * Math.cos(i);
-        var y = p2.y + arrowsOffset * Math.sin(i);
+        var x = p2.x + this.lineEndOffset * Math.cos(i);
+        var y = p2.y + this.lineEndOffset * Math.sin(i);
         ctx.beginPath();
         ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
         ctx.moveTo(x, y);
-        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.arc(x, y, this.lineEndRadius, 0, 2 * Math.PI);
         ctx.fill();
+        ctx.closePath();
+      }
+    }, {
+      key: "paintLineEndHollowCircle",
+      value: function paintLineEndHollowCircle(ctx, p1, p2) {
+        this.lineEndOffset = this.lineEndOffset || -5;
+        this.lineEndRadius = this.lineEndRadius || 5;
+        var i = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+        var x = p2.x + this.lineEndOffset * Math.cos(i);
+        var y = p2.y + this.lineEndOffset * Math.sin(i);
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, this.lineEndRadius, 0, 2 * Math.PI);
+        ctx.stroke();
         ctx.closePath();
       }
     }, {
@@ -4014,7 +4036,7 @@
       _this.mouseDownX = null;
       _this.mouseDownY = null;
       _this.mouseDownEvent = null;
-      _this.areaSelect = false;
+      _this.areaSelect = true;
       _this.operations = [];
       _this.selectedElements = [];
       _this.paintAll = false;
@@ -4375,32 +4397,39 @@
         this.mouseDownY = e.y;
         this.mouseDownEvent = e;
 
-        if (this.mode === SceneMode.normal) {
-          this.selectElement(e);
-
-          if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
-            this.lastTranslateX = this.translateX;
-            this.lastTranslateY = this.translateY;
-          }
-        } else {
-          if (this.mode === SceneMode.drag && this.translate) {
-            this.lastTranslateX = this.translateX;
-            this.lastTranslateY = this.translateY;
-            return;
-          }
-
-          if (this.mode === SceneMode.select) {
+        switch (this.mode) {
+          case SceneMode.normal:
             this.selectElement(e);
-          } else {
-            if (this.mode === SceneMode.edit) {
-              this.selectElement(e);
 
-              if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
-                this.lastTranslateX = this.translateX;
-                this.lastTranslateY = this.translateY;
-              }
+            if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
             }
-          }
+
+            break;
+
+          case SceneMode.drag:
+            if (this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
+              return;
+            }
+
+            break;
+
+          case SceneMode.select:
+            this.selectElement(e);
+            break;
+
+          case SceneMode.edit:
+            this.selectElement(e);
+
+            if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
+            }
+
+            break;
         }
 
         this.dispatchEvent("mousedown", e);

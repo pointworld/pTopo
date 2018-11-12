@@ -12,6 +12,8 @@ export default class Link extends InteractiveElement {
 
     if (arguments.length) {
       this.lineEndType = null
+      this.lineEndOffset = 0
+      this.lineEndRadius = 0
       this.isDoubleLineEnd = false
 
       this.text = text
@@ -146,6 +148,9 @@ export default class Link extends InteractiveElement {
 
   paintLineEnd(ctx, p1, p2, lineEndType) {
     switch (lineEndType) {
+      case 'hollowCircle':
+        this.paintLineEndHollowCircle(ctx, p1, p2)
+        break
       case 'solidCircle':
         this.paintLineEndSolidCircle(ctx, p1, p2)
         break
@@ -186,16 +191,34 @@ export default class Link extends InteractiveElement {
   }
 
   paintLineEndSolidCircle(ctx, p1, p2) {
-    const arrowsOffset = this.arrowsOffset || 0
+    this.lineEndOffset = this.lineEndOffset || -5
+    this.lineEndRadius = this.lineEndRadius || 5
+
     let i = Math.atan2(p2.y - p1.y, p2.x - p1.x)
-    const x = p2.x + arrowsOffset * Math.cos(i)
-    const y = p2.y + arrowsOffset * Math.sin(i)
+    const x = p2.x + this.lineEndOffset * Math.cos(i)
+    const y = p2.y + this.lineEndOffset * Math.sin(i)
 
     ctx.beginPath()
     ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")"
     ctx.moveTo(x, y)
-    ctx.arc(x, y, 5, 0, 2 * Math.PI)
+    ctx.arc(x, y, this.lineEndRadius, 0, 2 * Math.PI)
     ctx.fill()
+    ctx.closePath()
+  }
+
+  paintLineEndHollowCircle(ctx, p1, p2) {
+    this.lineEndOffset = this.lineEndOffset || -5
+    this.lineEndRadius = this.lineEndRadius || 5
+
+    let i = Math.atan2(p2.y - p1.y, p2.x - p1.x)
+    const x = p2.x + this.lineEndOffset * Math.cos(i)
+    const y = p2.y + this.lineEndOffset * Math.sin(i)
+
+    ctx.beginPath()
+    ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")"
+    ctx.moveTo(x, y)
+    ctx.arc(x, y, this.lineEndRadius, 0, 2 * Math.PI)
+    ctx.stroke()
     ctx.closePath()
   }
 
