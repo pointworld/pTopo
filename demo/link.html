@@ -96,13 +96,20 @@
     return link
   }
 
-  const from1 = newNode(100, 60, 30, 30)
-  const to1 = newNode(300, 60, 30, 30)
+  const from1 = newNode(100, 0, 30, 30)
+  const to1 = newNode(300, 0, 30, 30)
   newLink(from1, to1, 'Link')
+
+  const from_arrow = newNode(100, 60, 30, 30)
+  const to_arrow = newNode(300, 60, 30, 30)
+  const link_arrow = newLink(from_arrow, to_arrow, 'Arrow', 5)
+  link_arrow.lineEndType = 'arrow'
+  link_arrow.arrowsRadius = 10
 
   const from2 = newNode(100, 120, 30, 30)
   const to2 = newNode(300, 120, 30, 30)
-  const link2 = newLink(from2, to2, 'Arrow', 5)
+  const link2 = newLink(from2, to2, 'SolidCircle', 5)
+  link2.lineEndType = 'solidCircle'
   link2.arrowsRadius = 10
 
   const from3 = newNode(100, 200, 30, 30)

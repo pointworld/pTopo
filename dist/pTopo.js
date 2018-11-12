@@ -1,5 +1,5 @@
 /*!
- * pTopo.js v0.0.0
+ * pTopo.js v0.0.6
  * (c) 2018-2018 Point
  * Released under the MIT License.
  */
@@ -1410,6 +1410,8 @@
       _this.zIndex = zIndex_Link;
 
       if (arguments.length) {
+        _this.lineEndType = null;
+        _this.isDoubleLineEnd = false;
         _this.text = text;
         _this.nodeA = nodeA;
         _this.nodeA && !_this.nodeA.inLinks && (_this.nodeA.inLinks = []);
@@ -1447,28 +1449,6 @@
       value: function caculateIndex() {
         var len = getSharedLinksLen(this.nodeA, this.nodeZ);
         len && (this.nodeIndex = len - 1);
-      }
-    }, {
-      key: "removeHandler",
-      value: function removeHandler() {
-        var self = this;
-
-        if (self.nodeA && self.nodeA.outLinks) {
-          self.nodeA.outLinks = self.nodeA.outLinks.filter(function (outLink) {
-            return outLink !== self;
-          });
-        }
-
-        if (self.nodeZ && self.nodeZ.inLinks) {
-          self.nodeZ.inLinks = self.nodeZ.inLinks.filter(function (inLink) {
-            return inLink !== self;
-          });
-        }
-
-        var unsharedLinksArr = unsharedLinks(self);
-        unsharedLinksArr.forEach(function (unsharedLink, index) {
-          unsharedLink.nodeIndex = index;
-        });
       }
     }, {
       key: "getStartPosition",
@@ -1546,37 +1526,63 @@
         return pathArr;
       }
     }, {
-      key: "paintPath",
-      value: function paintPath(ctx, pathArr) {
-        if (this.nodeA === this.nodeZ) return void this.paintLoop(ctx);
-        ctx.beginPath();
-        ctx.moveTo(pathArr[0].x, pathArr[0].y);
-
-        for (var i = 1, len = pathArr.length; i < len; i++) {
-          this.dashedPattern ? ctx.PTopoDashedLineTo(pathArr[i - 1].x, pathArr[i - 1].y, pathArr[i].x, pathArr[i].y, this.dashedPattern) : ctx.lineTo(pathArr[i].x, pathArr[i].y);
+      key: "isInBound",
+      value: function isInBound(x, y) {
+        if (this.nodeA === this.nodeZ) {
+          var d = this.bundleGap * (this.nodeIndex + 1) / 2;
+          var lineLength = getDistance(this.nodeA, {
+            x: x,
+            y: y
+          }) - d;
+          return Math.abs(lineLength) <= 3;
         }
 
-        ctx.stroke();
-        ctx.closePath();
+        var sign = false;
 
-        if (this.arrowsRadius) {
-          var d = pathArr[pathArr.length - 2];
-          var e = pathArr[pathArr.length - 1];
-          this.paintArrow(ctx, d, e);
+        for (var i = 1; i < this.path.length; i++) {
+          var p1 = this.path[i - 1];
+          var p2 = this.path[i];
+
+          if (isPointInLine({
+            x: x,
+            y: y
+          }, p1, p2)) {
+            sign = true;
+            break;
+          }
+        }
+
+        return sign;
+      }
+    }, {
+      key: "paint",
+      value: function paint(ctx) {
+        if (this.nodeA && this.nodeZ) {
+          var path = this.getPath(this.nodeIndex);
+          this.path = path;
+          ctx.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
+          ctx.lineWidth = this.lineWidth;
+          this.paintPath(ctx, path);
+          path && path.length > 0 && this.paintText(ctx, path);
         }
       }
     }, {
-      key: "paintLoop",
-      value: function paintLoop(ctx) {
-        ctx.beginPath();
-        var b = this.bundleGap * (this.nodeIndex + 1) / 2;
-        ctx.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI);
-        ctx.stroke();
-        ctx.closePath();
+      key: "paintLineEnd",
+      value: function paintLineEnd(ctx, p1, p2, lineEndType) {
+        switch (lineEndType) {
+          case 'solidCircle':
+            this.paintLineEndSolidCircle(ctx, p1, p2);
+            break;
+
+          case 'arrow':
+            this.paintLineEndArrow(ctx, p1, p2);
+            break;
+        }
       }
     }, {
-      key: "paintArrow",
-      value: function paintArrow(ctx, p1, p2) {
+      key: "paintLineEndArrow",
+      value: function paintLineEndArrow(ctx, p1, p2) {
+        this.arrowsRadius = this.arrowsRadius || 15;
         var e = this.arrowsOffset;
         var f = this.arrowsRadius / 2;
         var i = Math.atan2(p2.y - p1.y, p2.x - p1.x);
@@ -1603,16 +1609,55 @@
         ctx.closePath();
       }
     }, {
-      key: "paint",
-      value: function paint(ctx) {
-        if (this.nodeA && this.nodeZ) {
-          var path = this.getPath(this.nodeIndex);
-          this.path = path;
-          ctx.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
-          ctx.lineWidth = this.lineWidth;
-          this.paintPath(ctx, path);
-          path && path.length > 0 && this.paintText(ctx, path);
+      key: "paintLineEndSolidCircle",
+      value: function paintLineEndSolidCircle(ctx, p1, p2) {
+        var arrowsOffset = this.arrowsOffset || 0;
+        var i = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+        var x = p2.x + arrowsOffset * Math.cos(i);
+        var y = p2.y + arrowsOffset * Math.sin(i);
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+      }
+    }, {
+      key: "paintLoop",
+      value: function paintLoop(ctx) {
+        ctx.beginPath();
+        var b = this.bundleGap * (this.nodeIndex + 1) / 2;
+        ctx.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI);
+        ctx.stroke();
+        ctx.closePath();
+      }
+    }, {
+      key: "paintPath",
+      value: function paintPath(ctx, pathArr) {
+        if (this.nodeA === this.nodeZ) return void this.paintLoop(ctx);
+        ctx.beginPath();
+        ctx.moveTo(pathArr[0].x, pathArr[0].y);
+
+        for (var i = 1, len = pathArr.length; i < len; i++) {
+          this.dashedPattern ? ctx.PTopoDashedLineTo(pathArr[i - 1].x, pathArr[i - 1].y, pathArr[i].x, pathArr[i].y, this.dashedPattern) : ctx.lineTo(pathArr[i].x, pathArr[i].y);
         }
+
+        ctx.stroke();
+        ctx.closePath();
+
+        if (this.lineEndType) {
+          var p1 = pathArr[pathArr.length - 2];
+          var p2 = pathArr[pathArr.length - 1];
+          this.paintLineEnd(ctx, p1, p2, this.lineEndType);
+        }
+      }
+    }, {
+      key: "paintSelected",
+      value: function paintSelected(ctx) {
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(0,0,0,1)";
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
       }
     }, {
       key: "paintText",
@@ -1653,41 +1698,26 @@
         }
       }
     }, {
-      key: "paintSelected",
-      value: function paintSelected(ctx) {
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = "rgba(0,0,0,1)";
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-      }
-    }, {
-      key: "isInBound",
-      value: function isInBound(x, y) {
-        if (this.nodeA === this.nodeZ) {
-          var d = this.bundleGap * (this.nodeIndex + 1) / 2;
-          var lineLength = getDistance(this.nodeA, {
-            x: x,
-            y: y
-          }) - d;
-          return Math.abs(lineLength) <= 3;
+      key: "removeHandler",
+      value: function removeHandler() {
+        var self = this;
+
+        if (self.nodeA && self.nodeA.outLinks) {
+          self.nodeA.outLinks = self.nodeA.outLinks.filter(function (outLink) {
+            return outLink !== self;
+          });
         }
 
-        var sign = false;
-
-        for (var i = 1; i < this.path.length; i++) {
-          var p1 = this.path[i - 1];
-          var p2 = this.path[i];
-
-          if (isPointInLine({
-            x: x,
-            y: y
-          }, p1, p2)) {
-            sign = true;
-            break;
-          }
+        if (self.nodeZ && self.nodeZ.inLinks) {
+          self.nodeZ.inLinks = self.nodeZ.inLinks.filter(function (inLink) {
+            return inLink !== self;
+          });
         }
 
-        return sign;
+        var unsharedLinksArr = unsharedLinks(self);
+        unsharedLinksArr.forEach(function (unsharedLink, index) {
+          unsharedLink.nodeIndex = index;
+        });
       }
     }]);
 
@@ -4857,7 +4887,7 @@
     return Scene;
   }(Element);
 
-  var version = "0.0.0";
+  var version = "0.0.6";
 
   var Stage =
   /*#__PURE__*/

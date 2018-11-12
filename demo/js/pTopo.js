@@ -1,5 +1,5 @@
 /*!
- * pTopo.js v0.0.0
+ * pTopo.js v0.0.6
  * (c) 2018-2018 Point
  * Released under the MIT License.
  */
@@ -1410,6 +1410,8 @@
       _this.zIndex = zIndex_Link;
 
       if (arguments.length) {
+        _this.lineEndType = null;
+        _this.isDoubleEnd = false;
         _this.text = text;
         _this.nodeA = nodeA;
         _this.nodeA && !_this.nodeA.inLinks && (_this.nodeA.inLinks = []);
@@ -1443,6 +1445,33 @@
     }
 
     _createClass(Link, [{
+      key: "paintLineEnd",
+      value: function paintLineEnd(ctx, p1, p2, lineEndType) {
+        switch (lineEndType) {
+          case 'solidCircle':
+            this.paintSolidCircleLineEnd(ctx, p1, p2);
+            break;
+
+          case 'arrow':
+            this.paintArrow(ctx, p1, p2);
+            break;
+        }
+      }
+    }, {
+      key: "paintSolidCircleLineEnd",
+      value: function paintSolidCircleLineEnd(ctx, p1, p2) {
+        var arrowsOffset = this.arrowsOffset || -5;
+        var i = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+        var x = p2.x + arrowsOffset * Math.cos(i);
+        var y = p2.y + arrowsOffset * Math.sin(i);
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")";
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+      }
+    }, {
       key: "caculateIndex",
       value: function caculateIndex() {
         var len = getSharedLinksLen(this.nodeA, this.nodeZ);
@@ -1557,12 +1586,17 @@
         }
 
         ctx.stroke();
-        ctx.closePath();
+        ctx.closePath(); // if (this.arrowsRadius) {
+        //   const p1 = pathArr[pathArr.length - 2]
+        //   const p2 = pathArr[pathArr.length - 1]
+        //
+        //   this.paintArrow(ctx, p1, p2)
+        // }
 
-        if (this.arrowsRadius) {
-          var d = pathArr[pathArr.length - 2];
-          var e = pathArr[pathArr.length - 1];
-          this.paintArrow(ctx, d, e);
+        if (this.lineEndType) {
+          var p1 = pathArr[pathArr.length - 2];
+          var p2 = pathArr[pathArr.length - 1];
+          this.paintLineEnd(ctx, p1, p2, this.lineEndType);
         }
       }
     }, {
@@ -1577,6 +1611,7 @@
     }, {
       key: "paintArrow",
       value: function paintArrow(ctx, p1, p2) {
+        this.arrowsRadius = this.arrowsRadius || 15;
         var e = this.arrowsOffset;
         var f = this.arrowsRadius / 2;
         var i = Math.atan2(p2.y - p1.y, p2.x - p1.x);
@@ -4857,7 +4892,7 @@
     return Scene;
   }(Element);
 
-  var version = "0.0.0";
+  var version = "0.0.6";
 
   var Stage =
   /*#__PURE__*/
