@@ -117,7 +117,8 @@
   const to_hollowCircle = newNode(300, 180, 30, 30)
   const link_hollowCircle = newLink(from_hollowCircle, to_hollowCircle, 'HollowCircle', 5)
   link_hollowCircle.lineEndType = 'hollowCircle'
-  link_hollowCircle.arrowsRadius = 10
+  link_hollowCircle.linkConnectType = 'toBorder'
+  // link_hollowCircle.arrowsRadius = 10
 
   const from3 = newNode(100, 240, 30, 30)
   const to3 = newNode(200, 340, 30, 30)

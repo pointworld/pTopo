@@ -50,21 +50,75 @@ export default class Link extends InteractiveElement {
     len && (this.nodeIndex = len - 1)
   }
 
+  getLineEndCoodByDiameter(p1, p2, d) {
+    const point = {}
+
+    const l1 = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+    const l3 = l1 + d
+
+    point.x = p2.x + (p1.x - p2.x) * l3 / l1
+    point.y = p2.y + (p1.y - p2.y) * l3 / l1
+
+    return point
+  }
+
   getStartPosition() {
-    return {x: this.nodeA.cx, y: this.nodeA.cy}
+    let linkPointA = {}
+
+    switch (this.linkConnectType) {
+      case 'toBorder':
+        linkPointA = getIntersectionPointObj(this.nodeA, this.nodeZ)
+
+        if (linkPointA) {
+          linkPointA = this.getLineEndCoodByDiameter(
+            {x: linkPointA.x, y: linkPointA.y},
+            {x: this.nodeA.cx, y: this.nodeA.cy},
+            10
+          )
+        }
+
+        linkPointA = linkPointA
+          ? linkPointA
+          : {x: this.nodeA.cx, y: this.nodeA.cy}
+
+        break
+      default:
+        linkPointA = {x: this.nodeA.cx, y: this.nodeA.cy}
+    }
+
+    return linkPointA
   }
 
   getEndPosition() {
-    let point
+    let linkPointZ = {}
 
-    this.arrowsRadius && (point = getIntersectionPointObj(this.nodeZ, this.nodeA))
+    switch (this.linkConnectType) {
+      case 'toBorder':
+        linkPointZ = getIntersectionPointObj(this.nodeZ, this.nodeA)
 
-    !point && (point = {
-      x: this.nodeZ.cx,
-      y: this.nodeZ.cy
-    })
+        if (linkPointZ) {
+          linkPointZ = this.getLineEndCoodByDiameter(
+            {x: linkPointZ.x, y: linkPointZ.y},
+            {x: this.nodeZ.cx, y: this.nodeZ.cy},
+            10
+          )
+        }
 
-    return point
+        linkPointZ = linkPointZ
+          ? linkPointZ
+          : {x: this.nodeZ.cx, y: this.nodeZ.cy}
+        break
+      default:
+        this.arrowsRadius
+        && (linkPointZ = getIntersectionPointObj(this.nodeZ, this.nodeA))
+
+        !linkPointZ && (linkPointZ = {
+          x: this.nodeZ.cx,
+          y: this.nodeZ.cy
+        })
+    }
+
+    return linkPointZ
   }
 
   getPath() {

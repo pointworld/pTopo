@@ -1151,47 +1151,56 @@
   function isPointInLineSeg(x, y, lineFn) {
     return inRange(x, lineFn.x1, lineFn.x2) && inRange(y, lineFn.y1, lineFn.y2);
   }
-  function intersection(lineFn1, lineFn2) {
+  function intersection(lineObj1, lineObj2) {
     var x;
     var y;
-
-    if (lineFn1.k === lineFn2.k) {
-      return null;
-    } else {
-      if (1 / 0 === lineFn1.k || -1 / 0 === lineFn1.k) {
-        x = lineFn1.x1;
-        y = lineFn2(lineFn1.x1);
-        return {
-          x: x,
-          y: y
-        };
-      } else {
-        if (1 / 0 === lineFn2.k || -1 / 0 === lineFn2.k) {
-          x = lineFn2.x1;
-          y = lineFn1(lineFn2.x1);
-          return {
-            x: x,
-            y: y
-          };
-        } else {
-          x = (lineFn2.b - lineFn1.b) / (lineFn1.k - lineFn2.k);
-          y = lineFn1(x);
-
-          if (!isPointInLineSeg(x, y, lineFn1)) {
-            return null;
-          } else {
-            if (isPointInLineSeg(x, y, lineFn2)) {
-              return null;
-            } else {
-              return {
-                x: x,
-                y: y
-              };
-            }
-          }
-        }
-      }
-    }
+    return lineObj1.k == lineObj2.k ? null : (1 / 0 == lineObj1.k || lineObj1.k == -1 / 0 ? (x = lineObj1.x1, y = lineObj2(lineObj1.x1)) : 1 / 0 == lineObj2.k || lineObj2.k == -1 / 0 ? (x = lineObj2.x1, y = lineObj1(lineObj2.x1)) : (x = (lineObj2.b - lineObj1.b) / (lineObj1.k - lineObj2.k), y = lineObj1(x)), 0 == isPointInLineSeg(x, y, lineObj1) ? null : 0 == isPointInLineSeg(x, y, lineObj2) ? null : {
+      x: x,
+      y: y
+    }); // let x
+    // let y
+    //
+    // if (lineFn1.k === lineFn2.k) {
+    //   return null
+    // }
+    // else {
+    //   if (
+    //     1 / 0 === lineFn1.k
+    //     || -1 / 0 === lineFn1.k
+    //   ) {
+    //     x = lineFn1.x1
+    //     y = lineFn2(lineFn1.x1)
+    //
+    //     return {x, y}
+    //   }
+    //   else {
+    //     if (
+    //       1 / 0 === lineFn2.k
+    //       || -1 / 0 === lineFn2.k
+    //     ) {
+    //       x = lineFn2.x1
+    //       y = lineFn1(lineFn2.x1)
+    //
+    //       return {x, y}
+    //     }
+    //     else {
+    //       x = (lineFn2.b - lineFn1.b) / (lineFn1.k - lineFn2.k)
+    //       y = lineFn1(x)
+    //
+    //       if (!isPointInLineSeg(x, y, lineFn1)) {
+    //         return null
+    //       }
+    //       else {
+    //         if (isPointInLineSeg(x, y, lineFn2)) {
+    //           return null
+    //         }
+    //         else {
+    //           return {x, y}
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
   function createId() {
     return "front" + new Date().getTime() + Math.round(Math.random() * 1000000);
@@ -1453,23 +1462,83 @@
         len && (this.nodeIndex = len - 1);
       }
     }, {
+      key: "getLineEndCoodByDiameter",
+      value: function getLineEndCoodByDiameter(p1, p2, d) {
+        var point = {};
+        var l1 = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+        var l3 = l1 + d;
+        point.x = p2.x + (p1.x - p2.x) * l3 / l1;
+        point.y = p2.y + (p1.y - p2.y) * l3 / l1;
+        return point;
+      }
+    }, {
       key: "getStartPosition",
       value: function getStartPosition() {
-        return {
-          x: this.nodeA.cx,
-          y: this.nodeA.cy
-        };
+        var linkPointA = {};
+
+        switch (this.linkConnectType) {
+          case 'toBorder':
+            linkPointA = getIntersectionPointObj(this.nodeA, this.nodeZ);
+
+            if (linkPointA) {
+              linkPointA = this.getLineEndCoodByDiameter({
+                x: linkPointA.x,
+                y: linkPointA.y
+              }, {
+                x: this.nodeA.cx,
+                y: this.nodeA.cy
+              }, 10);
+            }
+
+            linkPointA = linkPointA ? linkPointA : {
+              x: this.nodeA.cx,
+              y: this.nodeA.cy
+            };
+            break;
+
+          default:
+            linkPointA = {
+              x: this.nodeA.cx,
+              y: this.nodeA.cy
+            };
+        }
+
+        return linkPointA;
       }
     }, {
       key: "getEndPosition",
       value: function getEndPosition() {
-        var point;
-        this.arrowsRadius && (point = getIntersectionPointObj(this.nodeZ, this.nodeA));
-        !point && (point = {
-          x: this.nodeZ.cx,
-          y: this.nodeZ.cy
-        });
-        return point;
+        var linkPointZ = {};
+
+        switch (this.linkConnectType) {
+          case 'toBorder':
+            linkPointZ = getIntersectionPointObj(this.nodeZ, this.nodeA);
+
+            if (linkPointZ) {
+              linkPointZ = this.getLineEndCoodByDiameter({
+                x: linkPointZ.x,
+                y: linkPointZ.y
+              }, {
+                x: this.nodeZ.cx,
+                y: this.nodeZ.cy
+              }, 10);
+            }
+
+            linkPointZ = linkPointZ ? linkPointZ : {
+              x: this.nodeZ.cx,
+              y: this.nodeZ.cy
+            };
+            break;
+
+          default:
+            this.arrowsRadius && (linkPointZ = getIntersectionPointObj(this.nodeZ, this.nodeA));
+            !linkPointZ && (linkPointZ = {
+              x: this.nodeZ.cx,
+              y: this.nodeZ.cy
+            });
+        }
+
+        return linkPointZ;
       }
     }, {
       key: "getPath",
