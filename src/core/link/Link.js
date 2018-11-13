@@ -4,65 +4,50 @@ import {getIntersectionPointObj, unsharedLinks, getSharedLinksLen} from './util'
 import {zIndex_Link} from "../../shared/constants"
 
 export default class Link extends InteractiveElement {
-  constructor(nodeA, nodeZ, text, opts) {
-    super(nodeA, nodeZ, text, opts)
+  constructor(nodeA, nodeZ, text) {
+    super(nodeA, nodeZ, text)
 
     this.elementType = "link"
     this.zIndex = zIndex_Link
-    this.text = text
-    this.nodeA = nodeA
-    this.nodeA && !this.nodeA.inLinks && (this.nodeA.inLinks = [])
-    this.nodeA && !this.nodeA.outLinks && (this.nodeA.outLinks = [])
-    this.nodeA && this.nodeA.outLinks.push(this)
-    this.nodeZ = nodeZ
-    this.nodeZ && !this.nodeZ.inLinks && (this.nodeZ.inLinks = [])
-    this.nodeZ && !this.nodeZ.outLinks && (this.nodeZ.outLinks = [])
-    this.nodeZ && this.nodeZ.inLinks.push(this)
-    this.caculateIndex()
-    this.font = opts.font || "12px Consolas"
-    this.fontColor = opts.fontColor || "255,255,255"
-    this.lineWidth = opts.lineWidth || 2
-    this.lineJoin = opts.lineJoin || "miter"
-    this.transformAble = false
-    this.bundleOffset = opts.bundleOffset || 20
-    this.bundleGap = opts.bundleGap || 12
-    this.textOffsetX = opts.textOffsetX || 0
-    this.textOffsetY = opts.textOffsetY || 0
-    this.arrowsRadius = opts.arrowsRadius || null
-    this.arrowsOffset = opts.arrowsOffset || 0
-    this.dashedPattern = opts.dashedPattern || null
-    this.path = opts.path || []
 
-    const keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",")
-    this.serializedProperties = this.serializedProperties.concat(keysArr)
+    if (arguments.length) {
+      this.lineEndType = null
+      this.lineEndOffset = 0
+      this.lineEndRadius = 0
+      this.isDoubleLineEnd = false
 
+      this.text = text
+      this.nodeA = nodeA
+      this.nodeA && !this.nodeA.inLinks && (this.nodeA.inLinks = [])
+      this.nodeA && !this.nodeA.outLinks && (this.nodeA.outLinks = [])
+      this.nodeA && this.nodeA.outLinks.push(this)
+      this.nodeZ = nodeZ
+      this.nodeZ && !this.nodeZ.inLinks && (this.nodeZ.inLinks = [])
+      this.nodeZ && !this.nodeZ.outLinks && (this.nodeZ.outLinks = [])
+      this.nodeZ && this.nodeZ.inLinks.push(this)
+      this.caculateIndex()
+      this.font = "12px Consolas"
+      this.fontColor = "255,255,255"
+      this.lineWidth = 2
+      this.lineJoin = "miter"
+      this.transformAble = false
+      this.bundleOffset = 20
+      this.bundleGap = 12
+      this.textOffsetX = 0
+      this.textOffsetY = 0
+      this.arrowsRadius = null
+      this.arrowsOffset = 0
+      this.dashedPattern = null
+      this.path = []
+
+      const keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",")
+      this.serializedProperties = this.serializedProperties.concat(keysArr)
+    }
   }
 
   caculateIndex() {
     const len = getSharedLinksLen(this.nodeA, this.nodeZ)
     len && (this.nodeIndex = len - 1)
-  }
-
-  removeHandler() {
-    const self = this
-
-    if (self.nodeA && self.nodeA.outLinks) {
-      self.nodeA.outLinks = self.nodeA.outLinks.filter(function (outLink) {
-        return outLink !== self
-      })
-    }
-
-    if (self.nodeZ && self.nodeZ.inLinks) {
-      self.nodeZ.inLinks = self.nodeZ.inLinks.filter(function (inLink) {
-        return inLink !== self
-      })
-    }
-
-    let unsharedLinksArr = unsharedLinks(self)
-
-    unsharedLinksArr.forEach(function (unsharedLink, index) {
-      unsharedLink.nodeIndex = index
-    })
   }
 
   getStartPosition() {
@@ -123,46 +108,61 @@ export default class Link extends InteractiveElement {
     return pathArr
   }
 
-  paintPath(ctx, pathArr) {
-    if (this.nodeA === this.nodeZ) return void this.paintLoop(ctx)
+  isInBound(x, y) {
+    if (this.nodeA === this.nodeZ) {
+      const d = this.bundleGap * (this.nodeIndex + 1) / 2
+      const lineLength = getDistance(this.nodeA, {
+        x: x,
+        y: y
+      }) - d
 
-    ctx.beginPath()
-    ctx.moveTo(pathArr[0].x, pathArr[0].y)
-
-    for (let i = 1, len = pathArr.length; i < len; i++) {
-      this.dashedPattern
-        ? ctx.PTopoDashedLineTo(
-        pathArr[i - 1].x,
-        pathArr[i - 1].y,
-        pathArr[i].x,
-        pathArr[i].y,
-        this.dashedPattern
-        )
-        : ctx.lineTo(pathArr[i].x, pathArr[i].y)
+      return Math.abs(lineLength) <= 3
     }
 
-    ctx.stroke()
-    ctx.closePath()
+    let sign = false
 
-    if (this.arrowsRadius) {
-      const d = pathArr[pathArr.length - 2]
-      const e = pathArr[pathArr.length - 1]
+    for (let i = 1; i < this.path.length; i++) {
+      const p1 = this.path[i - 1]
+      const p2 = this.path[i]
 
-      this.paintArrow(ctx, d, e)
+      if (isPointInLine({x: x, y: y}, p1, p2)) {
+        sign = true
+        break
+      }
+    }
+
+    return sign
+  }
+
+  paint(ctx) {
+    if (this.nodeA && this.nodeZ) {
+      const path = this.getPath(this.nodeIndex)
+
+      this.path = path
+      ctx.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")"
+      ctx.lineWidth = this.lineWidth
+      this.paintPath(ctx, path)
+      path && path.length > 0 && this.paintText(ctx, path)
     }
   }
 
-  paintLoop(ctx) {
-    ctx.beginPath()
-
-    let b = this.bundleGap * (this.nodeIndex + 1) / 2
-
-    ctx.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI)
-    ctx.stroke()
-    ctx.closePath()
+  paintLineEnd(ctx, p1, p2, lineEndType) {
+    switch (lineEndType) {
+      case 'hollowCircle':
+        this.paintLineEndHollowCircle(ctx, p1, p2)
+        break
+      case 'solidCircle':
+        this.paintLineEndSolidCircle(ctx, p1, p2)
+        break
+      case 'arrow':
+        this.paintLineEndArrow(ctx, p1, p2)
+        break
+    }
   }
 
-  paintArrow(ctx, p1, p2) {
+  paintLineEndArrow(ctx, p1, p2) {
+    this.arrowsRadius = this.arrowsRadius || 15
+
     const e = this.arrowsOffset
     const f = this.arrowsRadius / 2
     let i = Math.atan2(p2.y - p1.y, p2.x - p1.x)
@@ -190,16 +190,82 @@ export default class Link extends InteractiveElement {
     ctx.closePath()
   }
 
-  paint(ctx) {
-    if (this.nodeA && this.nodeZ) {
-      const path = this.getPath(this.nodeIndex)
+  paintLineEndSolidCircle(ctx, p1, p2) {
+    this.lineEndOffset = this.lineEndOffset || -5
+    this.lineEndRadius = this.lineEndRadius || 5
 
-      this.path = path
-      ctx.strokeStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")"
-      ctx.lineWidth = this.lineWidth
-      this.paintPath(ctx, path)
-      path && path.length > 0 && this.paintText(ctx, path)
+    let i = Math.atan2(p2.y - p1.y, p2.x - p1.x)
+    const x = p2.x + this.lineEndOffset * Math.cos(i)
+    const y = p2.y + this.lineEndOffset * Math.sin(i)
+
+    ctx.beginPath()
+    ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")"
+    ctx.moveTo(x, y)
+    ctx.arc(x, y, this.lineEndRadius, 0, 2 * Math.PI)
+    ctx.fill()
+    ctx.closePath()
+  }
+
+  paintLineEndHollowCircle(ctx, p1, p2) {
+    this.lineEndOffset = this.lineEndOffset || -5
+    this.lineEndRadius = this.lineEndRadius || 5
+
+    let i = Math.atan2(p2.y - p1.y, p2.x - p1.x)
+    const x = p2.x + this.lineEndOffset * Math.cos(i)
+    const y = p2.y + this.lineEndOffset * Math.sin(i)
+
+    ctx.beginPath()
+    ctx.fillStyle = "rgba(" + this.strokeColor + "," + this.alpha + ")"
+    ctx.moveTo(x, y)
+    ctx.arc(x, y, this.lineEndRadius, 0, 2 * Math.PI)
+    ctx.stroke()
+    ctx.closePath()
+  }
+
+  paintLoop(ctx) {
+    ctx.beginPath()
+
+    let b = this.bundleGap * (this.nodeIndex + 1) / 2
+
+    ctx.arc(this.nodeA.x, this.nodeA.y, b, Math.PI / 2, 2 * Math.PI)
+    ctx.stroke()
+    ctx.closePath()
+  }
+
+  paintPath(ctx, pathArr) {
+    if (this.nodeA === this.nodeZ) return void this.paintLoop(ctx)
+
+    ctx.beginPath()
+    ctx.moveTo(pathArr[0].x, pathArr[0].y)
+
+    for (let i = 1, len = pathArr.length; i < len; i++) {
+      this.dashedPattern
+        ? ctx.PTopoDashedLineTo(
+        pathArr[i - 1].x,
+        pathArr[i - 1].y,
+        pathArr[i].x,
+        pathArr[i].y,
+        this.dashedPattern
+        )
+        : ctx.lineTo(pathArr[i].x, pathArr[i].y)
     }
+
+    ctx.stroke()
+    ctx.closePath()
+
+    if (this.lineEndType) {
+      const p1 = pathArr[pathArr.length - 2]
+      const p2 = pathArr[pathArr.length - 1]
+
+      this.paintLineEnd(ctx, p1, p2, this.lineEndType)
+    }
+  }
+
+  paintSelected(ctx) {
+    ctx.shadowBlur = 10
+    ctx.shadowColor = "rgba(0,0,0,1)"
+    ctx.shadowOffsetX = 0
+    ctx.shadowOffsetY = 0
   }
 
   paintText(ctx, path) {
@@ -245,36 +311,25 @@ export default class Link extends InteractiveElement {
     }
   }
 
-  paintSelected(ctx) {
-    ctx.shadowBlur = 10
-    ctx.shadowColor = "rgba(0,0,0,1)"
-    ctx.shadowOffsetX = 0
-    ctx.shadowOffsetY = 0
-  }
+  removeHandler() {
+    const self = this
 
-  isInBound(x, y) {
-    if (this.nodeA === this.nodeZ) {
-      const d = this.bundleGap * (this.nodeIndex + 1) / 2
-      const lineLength = getDistance(this.nodeA, {
-        x: x,
-        y: y
-      }) - d
-
-      return Math.abs(lineLength) <= 3
+    if (self.nodeA && self.nodeA.outLinks) {
+      self.nodeA.outLinks = self.nodeA.outLinks.filter(function (outLink) {
+        return outLink !== self
+      })
     }
 
-    let sign = false
-
-    for (let i = 1; i < this.path.length; i++) {
-      const p1 = this.path[i - 1]
-      const p2 = this.path[i]
-
-      if (isPointInLine({x: x, y: y}, p1, p2)) {
-        sign = true
-        break
-      }
+    if (self.nodeZ && self.nodeZ.inLinks) {
+      self.nodeZ.inLinks = self.nodeZ.inLinks.filter(function (inLink) {
+        return inLink !== self
+      })
     }
 
-    return sign
+    let unsharedLinksArr = unsharedLinks(self)
+
+    unsharedLinksArr.forEach(function (unsharedLink, index) {
+      unsharedLink.nodeIndex = index
+    })
   }
 }
