@@ -2014,13 +2014,75 @@
     return FoldLink;
   }(Link);
 
+  var CustomLink =
+  /*#__PURE__*/
+  function (_Link) {
+    _inherits(CustomLink, _Link);
+
+    function CustomLink(nodeA, nodeZ, text) {
+      _classCallCheck(this, CustomLink);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(CustomLink).call(this, nodeA, nodeZ, text));
+    }
+
+    _createClass(CustomLink, [{
+      key: "getPath",
+      value: function getPath() {
+        var pathObj = [];
+        var startPos = this.getStartPosition();
+        var endPos = this.getEndPosition();
+        pathObj.push(startPos);
+        pathObj.push({
+          x: 100,
+          y: 100
+        });
+        pathObj.push({
+          x: 200,
+          y: 150
+        });
+        pathObj.push({
+          x: 330,
+          y: 250
+        });
+        pathObj.push({
+          x: 400,
+          y: 200
+        });
+        pathObj.push(endPos);
+        return pathObj;
+      }
+    }, {
+      key: "paintText",
+      value: function paintText(ctx, b) {
+        if (this.text && this.text.length) {
+          var c = b[1];
+          var d = c.x + this.textOffsetX;
+          var e = c.y + this.textOffsetY;
+          ctx.save();
+          ctx.beginPath();
+          ctx.font = this.font;
+          var textW = ctx.measureText(this.text).width;
+          var cnW = ctx.measureText("田").width;
+          ctx.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
+          ctx.fillText(this.text, d - textW / 2, e - cnW / 2);
+          ctx.stroke();
+          ctx.closePath();
+          ctx.restore();
+        }
+      }
+    }]);
+
+    return CustomLink;
+  }(Link);
+
 
 
   var Link$1 = /*#__PURE__*/Object.freeze({
     Link: Link,
     CurveLink: CurveLink,
     FlexionalLink: FlexionalLink,
-    FoldLink: FoldLink
+    FoldLink: FoldLink,
+    CustomLink: CustomLink
   });
 
   var canvas$1 = document.createElement('canvas');
