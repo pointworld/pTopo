@@ -1151,47 +1151,56 @@
   function isPointInLineSeg(x, y, lineFn) {
     return inRange(x, lineFn.x1, lineFn.x2) && inRange(y, lineFn.y1, lineFn.y2);
   }
-  function intersection(lineFn1, lineFn2) {
+  function intersection(lineObj1, lineObj2) {
     var x;
     var y;
-
-    if (lineFn1.k === lineFn2.k) {
-      return null;
-    } else {
-      if (1 / 0 === lineFn1.k || -1 / 0 === lineFn1.k) {
-        x = lineFn1.x1;
-        y = lineFn2(lineFn1.x1);
-        return {
-          x: x,
-          y: y
-        };
-      } else {
-        if (1 / 0 === lineFn2.k || -1 / 0 === lineFn2.k) {
-          x = lineFn2.x1;
-          y = lineFn1(lineFn2.x1);
-          return {
-            x: x,
-            y: y
-          };
-        } else {
-          x = (lineFn2.b - lineFn1.b) / (lineFn1.k - lineFn2.k);
-          y = lineFn1(x);
-
-          if (!isPointInLineSeg(x, y, lineFn1)) {
-            return null;
-          } else {
-            if (isPointInLineSeg(x, y, lineFn2)) {
-              return null;
-            } else {
-              return {
-                x: x,
-                y: y
-              };
-            }
-          }
-        }
-      }
-    }
+    return lineObj1.k == lineObj2.k ? null : (1 / 0 == lineObj1.k || lineObj1.k == -1 / 0 ? (x = lineObj1.x1, y = lineObj2(lineObj1.x1)) : 1 / 0 == lineObj2.k || lineObj2.k == -1 / 0 ? (x = lineObj2.x1, y = lineObj1(lineObj2.x1)) : (x = (lineObj2.b - lineObj1.b) / (lineObj1.k - lineObj2.k), y = lineObj1(x)), 0 == isPointInLineSeg(x, y, lineObj1) ? null : 0 == isPointInLineSeg(x, y, lineObj2) ? null : {
+      x: x,
+      y: y
+    }); // let x
+    // let y
+    //
+    // if (lineFn1.k === lineFn2.k) {
+    //   return null
+    // }
+    // else {
+    //   if (
+    //     1 / 0 === lineFn1.k
+    //     || -1 / 0 === lineFn1.k
+    //   ) {
+    //     x = lineFn1.x1
+    //     y = lineFn2(lineFn1.x1)
+    //
+    //     return {x, y}
+    //   }
+    //   else {
+    //     if (
+    //       1 / 0 === lineFn2.k
+    //       || -1 / 0 === lineFn2.k
+    //     ) {
+    //       x = lineFn2.x1
+    //       y = lineFn1(lineFn2.x1)
+    //
+    //       return {x, y}
+    //     }
+    //     else {
+    //       x = (lineFn2.b - lineFn1.b) / (lineFn1.k - lineFn2.k)
+    //       y = lineFn1(x)
+    //
+    //       if (!isPointInLineSeg(x, y, lineFn1)) {
+    //         return null
+    //       }
+    //       else {
+    //         if (isPointInLineSeg(x, y, lineFn2)) {
+    //           return null
+    //         }
+    //         else {
+    //           return {x, y}
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
   function createId() {
     return "front" + new Date().getTime() + Math.round(Math.random() * 1000000);
@@ -1405,6 +1414,7 @@
 
       _classCallCheck(this, Link);
 
+      !opts && (opts = {});
       _this = _possibleConstructorReturn(this, _getPrototypeOf(Link).call(this, nodeA, nodeZ, text, opts));
       _this.elementType = "link";
       _this.zIndex = zIndex_Link;

@@ -5,6 +5,9 @@ import {zIndex_Link} from "../../shared/constants"
 
 export default class Link extends InteractiveElement {
   constructor(nodeA, nodeZ, text, opts) {
+
+    !opts && (opts = {})
+
     super(nodeA, nodeZ, text, opts)
 
     this.elementType = "link"
