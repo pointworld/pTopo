@@ -480,24 +480,24 @@
             y = boundObj.top;
             break;
 
-          case 'Top_right':
+          case 'Top_Right':
             x = boundObj.right;
             y = boundObj.top;
             break;
 
-          case 'Middle_left':
+          case 'Middle_Left':
             x = boundObj.left;
-            y = boundObj.cy;
+            y = this.cy;
             break;
 
           case 'Middle_Center':
-            x = boundObj.cx;
-            y = boundObj.cy;
+            x = this.cx;
+            y = this.cy;
             break;
 
           case 'Middle_Right':
             x = boundObj.right;
-            y = boundObj.cy;
+            y = this.cy;
             break;
 
           case 'Bottom_Left':
@@ -825,7 +825,7 @@
     move: "move"
   };
 
-  var posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Top", "Bottom_Right"];
+  var posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Right"];
 
   var EditableElement =
   /*#__PURE__*/
@@ -1151,47 +1151,56 @@
   function isPointInLineSeg(x, y, lineFn) {
     return inRange(x, lineFn.x1, lineFn.x2) && inRange(y, lineFn.y1, lineFn.y2);
   }
-  function intersection(lineFn1, lineFn2) {
+  function intersection(lineObj1, lineObj2) {
     var x;
     var y;
-
-    if (lineFn1.k === lineFn2.k) {
-      return null;
-    } else {
-      if (1 / 0 === lineFn1.k || -1 / 0 === lineFn1.k) {
-        x = lineFn1.x1;
-        y = lineFn2(lineFn1.x1);
-        return {
-          x: x,
-          y: y
-        };
-      } else {
-        if (1 / 0 === lineFn2.k || -1 / 0 === lineFn2.k) {
-          x = lineFn2.x1;
-          y = lineFn1(lineFn2.x1);
-          return {
-            x: x,
-            y: y
-          };
-        } else {
-          x = (lineFn2.b - lineFn1.b) / (lineFn1.k - lineFn2.k);
-          y = lineFn1(x);
-
-          if (!isPointInLineSeg(x, y, lineFn1)) {
-            return null;
-          } else {
-            if (isPointInLineSeg(x, y, lineFn2)) {
-              return null;
-            } else {
-              return {
-                x: x,
-                y: y
-              };
-            }
-          }
-        }
-      }
-    }
+    return lineObj1.k == lineObj2.k ? null : (1 / 0 == lineObj1.k || lineObj1.k == -1 / 0 ? (x = lineObj1.x1, y = lineObj2(lineObj1.x1)) : 1 / 0 == lineObj2.k || lineObj2.k == -1 / 0 ? (x = lineObj2.x1, y = lineObj1(lineObj2.x1)) : (x = (lineObj2.b - lineObj1.b) / (lineObj1.k - lineObj2.k), y = lineObj1(x)), 0 == isPointInLineSeg(x, y, lineObj1) ? null : 0 == isPointInLineSeg(x, y, lineObj2) ? null : {
+      x: x,
+      y: y
+    }); // let x
+    // let y
+    //
+    // if (lineFn1.k === lineFn2.k) {
+    //   return null
+    // }
+    // else {
+    //   if (
+    //     1 / 0 === lineFn1.k
+    //     || -1 / 0 === lineFn1.k
+    //   ) {
+    //     x = lineFn1.x1
+    //     y = lineFn2(lineFn1.x1)
+    //
+    //     return {x, y}
+    //   }
+    //   else {
+    //     if (
+    //       1 / 0 === lineFn2.k
+    //       || -1 / 0 === lineFn2.k
+    //     ) {
+    //       x = lineFn2.x1
+    //       y = lineFn1(lineFn2.x1)
+    //
+    //       return {x, y}
+    //     }
+    //     else {
+    //       x = (lineFn2.b - lineFn1.b) / (lineFn1.k - lineFn2.k)
+    //       y = lineFn1(x)
+    //
+    //       if (!isPointInLineSeg(x, y, lineFn1)) {
+    //         return null
+    //       }
+    //       else {
+    //         if (isPointInLineSeg(x, y, lineFn2)) {
+    //           return null
+    //         }
+    //         else {
+    //           return {x, y}
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
   function createId() {
     return "front" + new Date().getTime() + Math.round(Math.random() * 1000000);
@@ -1400,45 +1409,42 @@
   function (_InteractiveElement) {
     _inherits(Link, _InteractiveElement);
 
-    function Link(nodeA, nodeZ, text) {
+    function Link(nodeA, nodeZ, text, opts) {
       var _this;
 
       _classCallCheck(this, Link);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(Link).call(this, nodeA, nodeZ, text));
+      !opts && (opts = {});
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(Link).call(this, nodeA, nodeZ, text, opts));
       _this.elementType = "link";
       _this.zIndex = zIndex_Link;
+      _this.text = text;
+      _this.nodeA = nodeA;
+      _this.nodeA && !_this.nodeA.inLinks && (_this.nodeA.inLinks = []);
+      _this.nodeA && !_this.nodeA.outLinks && (_this.nodeA.outLinks = []);
+      _this.nodeA && _this.nodeA.outLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
+      _this.nodeZ = nodeZ;
+      _this.nodeZ && !_this.nodeZ.inLinks && (_this.nodeZ.inLinks = []);
+      _this.nodeZ && !_this.nodeZ.outLinks && (_this.nodeZ.outLinks = []);
+      _this.nodeZ && _this.nodeZ.inLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
 
-      if (arguments.length) {
-        _this.text = text;
-        _this.nodeA = nodeA;
-        _this.nodeA && !_this.nodeA.inLinks && (_this.nodeA.inLinks = []);
-        _this.nodeA && !_this.nodeA.outLinks && (_this.nodeA.outLinks = []);
-        _this.nodeA && _this.nodeA.outLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
-        _this.nodeZ = nodeZ;
-        _this.nodeZ && !_this.nodeZ.inLinks && (_this.nodeZ.inLinks = []);
-        _this.nodeZ && !_this.nodeZ.outLinks && (_this.nodeZ.outLinks = []);
-        _this.nodeZ && _this.nodeZ.inLinks.push(_assertThisInitialized(_assertThisInitialized(_this)));
+      _this.caculateIndex();
 
-        _this.caculateIndex();
-
-        _this.font = "12px Consolas";
-        _this.fontColor = "255,255,255";
-        _this.lineWidth = 2;
-        _this.lineJoin = "miter";
-        _this.transformAble = false;
-        _this.bundleOffset = 20;
-        _this.bundleGap = 12;
-        _this.textOffsetX = 0;
-        _this.textOffsetY = 0;
-        _this.arrowsRadius = null;
-        _this.arrowsOffset = 0;
-        _this.dashedPattern = null;
-        _this.path = [];
-        var keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",");
-        _this.serializedProperties = _this.serializedProperties.concat(keysArr);
-      }
-
+      _this.font = opts.font || "12px Consolas";
+      _this.fontColor = opts.fontColor || "255,255,255";
+      _this.lineWidth = opts.lineWidth || 2;
+      _this.lineJoin = opts.lineJoin || "miter";
+      _this.transformAble = false;
+      _this.bundleOffset = opts.bundleOffset || 20;
+      _this.bundleGap = opts.bundleGap || 12;
+      _this.textOffsetX = opts.textOffsetX || 0;
+      _this.textOffsetY = opts.textOffsetY || 0;
+      _this.arrowsRadius = opts.arrowsRadius || null;
+      _this.arrowsOffset = opts.arrowsOffset || 0;
+      _this.dashedPattern = opts.dashedPattern || null;
+      _this.path = opts.path || [];
+      var keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",");
+      _this.serializedProperties = _this.serializedProperties.concat(keysArr);
       return _this;
     }
 
@@ -3984,7 +3990,7 @@
       _this.mouseDownX = null;
       _this.mouseDownY = null;
       _this.mouseDownEvent = null;
-      _this.areaSelect = false;
+      _this.areaSelect = true;
       _this.operations = [];
       _this.selectedElements = [];
       _this.paintAll = false;
@@ -4345,32 +4351,39 @@
         this.mouseDownY = e.y;
         this.mouseDownEvent = e;
 
-        if (this.mode === SceneMode.normal) {
-          this.selectElement(e);
-
-          if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
-            this.lastTranslateX = this.translateX;
-            this.lastTranslateY = this.translateY;
-          }
-        } else {
-          if (this.mode === SceneMode.drag && this.translate) {
-            this.lastTranslateX = this.translateX;
-            this.lastTranslateY = this.translateY;
-            return;
-          }
-
-          if (this.mode === SceneMode.select) {
+        switch (this.mode) {
+          case SceneMode.normal:
             this.selectElement(e);
-          } else {
-            if (this.mode === SceneMode.edit) {
-              this.selectElement(e);
 
-              if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
-                this.lastTranslateX = this.translateX;
-                this.lastTranslateY = this.translateY;
-              }
+            if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
             }
-          }
+
+            break;
+
+          case SceneMode.drag:
+            if (this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
+              return;
+            }
+
+            break;
+
+          case SceneMode.select:
+            this.selectElement(e);
+            break;
+
+          case SceneMode.edit:
+            this.selectElement(e);
+
+            if (!this.currentElement || this.currentElement instanceof Link && this.translate) {
+              this.lastTranslateX = this.translateX;
+              this.lastTranslateY = this.translateY;
+            }
+
+            break;
         }
 
         this.dispatchEvent("mousedown", e);
@@ -5581,26 +5594,14 @@
           scenes = this.childs;
           scenes1 = scenes1.concat(scenes);
         } else {
-          if (this instanceof Scene) {
-            scenes = [this];
-          } else {
-            scenes1 = this;
-            scenes.forEach(function (a) {
-              scenes1 = scenes1.concat(a.childs);
-            });
-          }
+          this instanceof Scene ? scenes = [this] : scenes1 = this;
+          scenes.forEach(function (a) {
+            scenes1 = scenes1.concat(a.childs);
+          });
         }
 
-        var filteredScenes;
-
-        if ("function" === typeof cbOrCond) {
-          filteredScenes = scenes1.filter(cbOrCond);
-        } else {
-          getFilteredScenes(scenes1, cbOrCond);
-          filteredScenes = getFinalFilteredScenes(filteredScenes);
-        }
-
-        return filteredScenes;
+        var filteredScenes = "function" === typeof cbOrCond ? scenes1.filter(cbOrCond) : getFilteredScenes(scenes1, cbOrCond);
+        return getFinalFilteredScenes(filteredScenes);
       })
     }, {
       key: "click",
