@@ -8,26 +8,42 @@ export default class _Node extends EditableElement {
   constructor(text) {
     super(text)
 
+    // 元素类型
     this.elementType = 'node'
+    // 节点 zIndex 值
     this.zIndex = zIndex_Node
+    // 节点名
     this.text = text
+    // 节点名位置描述
     this.textPosition = 'Bottom_Center'
+    // 节点名横轴方向的偏移量
     this.textOffsetX = 0
+    // 节点名纵轴方向的偏移量
     this.textOffsetY = 0
+    // 字体
     this.font = '12px Consolas'
+    // 字体颜色
     this.fontColor = '255,255,255'
+    // 节点边框宽度
     this.borderWidth = 0
+    // 节点边框颜色
     this.borderColor = '255,255,255'
+    // 节点边框半径
     this.borderRadius = null
+    // 节点是否可拖拽
     this.dragable = true
+    // 节点是否可变换
     this.transformAble = true
+    // 节点的入线组成的数组
     this.inLinks = null
+    // 节点的出线组成的数组
     this.outLinks = null
 
     const keyArr = "text,font,fontColor,textPosition,textOffsetX,textOffsetY,borderRadius".split(",")
     this.serializedProperties = this.serializedProperties.concat(keyArr)
   }
 
+  // 绘制入口
   paint(ctx) {
     if (this.image) {
       const globalAlpha = ctx.globalAlpha
@@ -77,6 +93,7 @@ export default class _Node extends EditableElement {
     this.paintAlarmText(ctx)
   }
 
+  // 绘制节点名
   paintText(ctx) {
     const text = this.text
 
@@ -96,6 +113,7 @@ export default class _Node extends EditableElement {
     }
   }
 
+  // 绘制边框
   paintBorder(ctx) {
     if (this.borderWidth) {
       ctx.beginPath()
@@ -127,6 +145,7 @@ export default class _Node extends EditableElement {
     }
   }
 
+  // 绘制告警文本
   paintAlarmText(ctx) {
     if (
       this.alarm
@@ -164,6 +183,7 @@ export default class _Node extends EditableElement {
     }
   }
 
+  // 绘制节点名位置
   getTextPostion(posDesc, w, h) {
     let textPosObj = null
 
@@ -232,6 +252,7 @@ export default class _Node extends EditableElement {
     return textPosObj
   }
 
+  // 设置节点图片
   setImage(img, c) {
     if (!img) {
       throw new Error("Node.setImage(): 参数Image对象为空!")
@@ -270,6 +291,7 @@ export default class _Node extends EditableElement {
     }
   }
 
+  // 节点移除处理器
   removeHandler(node) {
     const self = this
 

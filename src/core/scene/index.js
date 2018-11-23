@@ -7,6 +7,7 @@ import Node from '../node/Node'
 import Link from '../link/Link'
 import {MouseCursor, SceneMode} from '../../shared/constants'
 
+// 绘制矩形
 function DrawRect(x, y, w, h) {
   return function (ctx) {
     ctx.beginPath()
@@ -24,16 +25,27 @@ export default class Scene extends Element {
     super(stage)
 
     this.eventEmitter = new EventEmitter
+    // 元素类型
     this.elementType = "scene"
+    // 场景子元素
     this.childs = []
+    // zIndex 值与某一类型的元素的映射关系，如 {2: [Link, Link, ..] 3: [Node, Node, ..]}
     this.zIndexMap = {}
+    // zIndex 值组成的数组，如 [2, 3]，2表示连线、3表示节点
     this.zIndexArray = []
+    // 场景背景颜色
     this.backgroundColor = "255, 255, 255"
+    // 场景是否可见
     this.visible = true
+    // 场景透明度
     this.alpha = 0
+    // 场景 X 轴偏移量
     this.scaleX = 1
+    // 场景 Y 轴偏移量
     this.scaleY = 1
+    // 场景模式
     this.mode = SceneMode.normal
+    // 场景是否可平移或纵移
     this.translate = true
     this.translateX = 0
     this.translateY = 0
@@ -43,9 +55,13 @@ export default class Scene extends Element {
     this.mouseDownX = null
     this.mouseDownY = null
     this.mouseDownEvent = null
+    // 框选区域
     this.areaSelect = false
+    // 操作数组
     this.operations = []
+    // 由被选中元素组成的数组
     this.selectedElements = []
+    // 是否绘制所有
     this.paintAll = false
 
     const properties = "background,backgroundColor,mode,paintAll,areaSelect,translate,translateX,translateY,lastTranslatedX,lastTranslatedY,alpha,visible,scaleX,scaleY".split(",")
@@ -58,24 +74,29 @@ export default class Scene extends Element {
     }
   }
 
+  // 设置场景背景
   setBackground(url) {
     this.background = url
   }
 
+  // 添加到舞台
   addTo(stage) {
     this.stage !== stage
     && stage
     && (this.stage = stage)
   }
 
+  // 展示当前场景
   show() {
     this.visible = true
   }
 
+  // 隐藏当前场景
   hide() {
     this.visible = false
   }
 
+  // 绘制入口
   paint(ctx) {
     if (this.visible && this.stage) {
       ctx.save()
@@ -98,10 +119,12 @@ export default class Scene extends Element {
     }
   }
 
+  // 场景重绘
   repaint(ctx) {
     this.visible && this.paint(ctx)
   }
 
+  // 绘制场景背景
   paintBackground(ctx) {
     if (this.background) {
       ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -114,6 +137,7 @@ export default class Scene extends Element {
     }
   }
 
+  // 获取可展示的元素
   getDisplayedElements() {
     let displayedEleArr = []
 
@@ -135,6 +159,7 @@ export default class Scene extends Element {
     return displayedEleArr
   }
 
+  // 获取可展示的节点
   getDisplayedNodes() {
     let displayedNodeArr = []
 
@@ -149,6 +174,7 @@ export default class Scene extends Element {
     return displayedNodeArr
   }
 
+  // 绘制节点
   paintChilds(ctx) {
     for (let i = 0, len = this.zIndexArray.length; i < len; i++) {
       const zIndex = this.zIndexArray[i]
@@ -205,6 +231,7 @@ export default class Scene extends Element {
     }
   }
 
+  // 获取场景偏移量
   getOffsetTranslate(a) {
     let w = this.stage.canvas.width
     let h = this.stage.canvas.height
@@ -247,12 +274,14 @@ export default class Scene extends Element {
       || 0 > g)
   }
 
+  // 绘制操作
   paintOperations(ctx, operations) {
     operations.forEach(function (operation) {
       operation(ctx)
     })
   }
 
+  // 通过传入一个处理函数找到场景中的某些元素
   findElements(cb) {
     let eleArr = []
 
@@ -263,24 +292,28 @@ export default class Scene extends Element {
     return eleArr
   }
 
+  // 通过元素类型名获取元素
   getElementsByClass(ClassName) {
     return this.findElements(function (ele) {
       return ele instanceof ClassName
     })
   }
 
+  // 添加操作
   addOperation(operation) {
     this.operations.push(operation)
 
     return this
   }
 
+  // 清除操作
   clearOperations() {
     this.operations = []
 
     return this
   }
 
+  // 通过 x, y 坐标获取元素
   getElementByXY(x, y) {
     let d = null
 
@@ -305,6 +338,7 @@ export default class Scene extends Element {
     return d
   }
 
+  // 添加元素到场景中
   add(ele) {
     this.childs.push(ele)
 
@@ -319,6 +353,7 @@ export default class Scene extends Element {
     this.zIndexMap["" + ele.zIndex].push(ele)
   }
 
+  // 从当前场景中移除元素
   remove(ele) {
     this.childs = removeFromArray(this.childs, ele)
 
@@ -329,6 +364,7 @@ export default class Scene extends Element {
     ele.removeHandler(this)
   }
 
+  // 清除场景中的所有元素
   clear() {
     this.childs.forEach(function (child) {
       child.removeHandler(this)
@@ -340,10 +376,12 @@ export default class Scene extends Element {
     this.zIndexMap = {}
   }
 
+  // 添加某个元素到被选中的元素数组中
   addToSelected(ele) {
     this.selectedElements.push(ele)
   }
 
+  // 取消所有被选中的元素的选中状态
   cancelAllSelected(a) {
     for (let i = 0, len = this.selectedElements.length; i < len; i++) {
       this.selectedElements[i].unselectedHandler(a)
@@ -352,6 +390,7 @@ export default class Scene extends Element {
     this.selectedElements = []
   }
 
+  // 判断某个节点是否在被选中的元素列表中
   notInSelectedNodes(a) {
     for (let i = 0, len = this.selectedElements.length; i < len; i++) {
       if (a === this.selectedElements[i]) return false
@@ -360,6 +399,7 @@ export default class Scene extends Element {
     return true
   }
 
+  // 从被选中的元素列表中移除某个元素
   removeFromSelected(a) {
     for (let i = 0, len = this.selectedElements.length; i < len; i++) {
       a === this.selectedElements[i]
@@ -367,6 +407,7 @@ export default class Scene extends Element {
     }
   }
 
+  //
   toSceneEvent(e) {
     const eObj = clone(e)
 
@@ -391,6 +432,7 @@ export default class Scene extends Element {
     return eObj
   }
 
+  // 选中某个元素
   selectElement(eObj) {
     const ele = this.getElementByXY(eObj.x, eObj.y)
 
@@ -420,6 +462,7 @@ export default class Scene extends Element {
     this.currentElement = ele
   }
 
+  // 鼠标在场景中按下的处理函数
   mousedownHandler(eObj) {
     const e = this.toSceneEvent(eObj)
 
@@ -718,17 +761,20 @@ export default class Scene extends Element {
     this.eventEmitter = new EventEmitter
   }
 
+  // 分配事件
   dispatchEvent(eName, eObj) {
     this.eventEmitter.publish(eName, eObj)
 
     return this
   }
 
+  // 场景缩放
   zoom(scaleX, scaleY) {
     scaleX && (this.scaleX = scaleX)
     scaleY && (this.scaleY = scaleY)
   }
 
+  // 场景放大
   zoomOut(scale) {
     if (scale) {
       this.scaleX /= scale
@@ -739,6 +785,7 @@ export default class Scene extends Element {
     }
   }
 
+  // 场景缩小
   zoomIn(scale) {
     if (scale) {
       this.scaleX *= scale
@@ -749,6 +796,7 @@ export default class Scene extends Element {
     }
   }
 
+  // 缩放重置
   zoomReset() {
     this.scaleX = 1
     this.scaleY = 1
@@ -784,6 +832,7 @@ export default class Scene extends Element {
     this.translateY = y
   }
 
+  // 设置场景中心点
   setCenter(x, y) {
     let translateX = x - this.stage.canvas.width / 2
     let translateY = y - this.stage.canvas.height / 2
@@ -792,6 +841,7 @@ export default class Scene extends Element {
     this.translateY = -translateY
   }
 
+  // 居中和缩放场景
   centerAndZoom(a, b, c) {
     if (a === 'toCenter') {
       this.translateToCenter(c)
@@ -831,6 +881,7 @@ export default class Scene extends Element {
     this.zoom(a, b)
   }
 
+  // 获取场景中心点坐标
   getCenterLocation() {
     return {
       x: this.stage.canvas.width / 2,
@@ -838,10 +889,12 @@ export default class Scene extends Element {
     }
   }
 
+  // 场景布局
   doLayout(fn) {
     fn && fn(this, this.childs)
   }
 
+  // 将场景中的所有节点信息序列化为 JSON
   toJson() {
     let self = this
     let jsonStr = "{"
@@ -867,10 +920,12 @@ export default class Scene extends Element {
     return jsonStr
   }
 
+  // 获取背景
   get background() {
     return this._background
   }
 
+  // 设置背景
   set background(a) {
     let cc = {}
 

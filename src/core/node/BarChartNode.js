@@ -12,6 +12,7 @@ export default class BarChartNode extends Node {
     this.titles = ["A", "B", "C"]
   }
 
+  // 绘制入口
   paint(ctx) {
     const c = 3
     const w = (this.width - c) / this.datas.length

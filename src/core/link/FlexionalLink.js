@@ -9,6 +9,7 @@ export default class FlexionalLink extends Link {
     this.offsetGap = 44
   }
 
+  // 获取二次折线起始位置
   getStartPosition() {
     const startPos = {x: this.nodeA.cx, y: this.nodeA.cy}
 
@@ -26,6 +27,7 @@ export default class FlexionalLink extends Link {
     return startPos
   }
 
+  // 获取二次折线结束位置
   getEndPosition() {
     const endPos = {
       x: this.nodeZ.cx,
@@ -46,6 +48,7 @@ export default class FlexionalLink extends Link {
     return endPos
   }
 
+  // 获取二次折线路径
   getPath(a) {
     const startPos = this.getStartPosition()
     const endPos = this.getEndPosition()

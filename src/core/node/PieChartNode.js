@@ -4,9 +4,13 @@ export default class PieChartNode extends CircleNode {
   constructor() {
     super()
 
+    // 半径
     this.radius = 150
+    // 各部分颜色值
     this.colors = ["#3666B0", "#2CA8E0", "#77D1F6"]
+    // 各部分所占比例
     this.datas = [.3, .3, .4]
+    // 各部分对应的名字
     this.titles = ["A", "B", "C"]
   }
 

@@ -43,6 +43,8 @@ function changeColor(ctx, imgEle, tarR, tarG, tarB, oriR, oriG, oriB) {
 
   return url
 }
+
+// 获取图片告警，即变色功能，返回 null 或图片元素
 export function getImageAlarm(imgEle, b) {
   !b && (b = 255)
 
@@ -50,7 +52,8 @@ export function getImageAlarm(imgEle, b) {
     if (alarmImageCache[imgEle.src]) return alarmImageCache[imgEle.src]
     
     const image = new Image
-      
+
+    // 不对图片做任何改变
     image.src = changeColor(flag.graphics, imgEle, b)
 
     alarmImageCache[imgEle.src] = image

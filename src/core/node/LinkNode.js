@@ -4,13 +4,20 @@ export default class LinkNode extends TextNode {
   constructor(text, href, target) {
     super()
 
+    // 链接文本
     this.text = text
+    // 链接地址
     this.href = href
+    // 链接目标
     this.target = target
+    // 元素类型
     this.elementType = "LinkNode"
+    // 是否被访问过
     this.isVisited = false
+    // 被访问后的颜色
     this.visitedColor = null
 
+    // 鼠标在该节点在移动时的展现
     this.mousemove(function () {
       const oCanvasArr = document.getElementsByTagName("canvas")
 
@@ -21,6 +28,7 @@ export default class LinkNode extends TextNode {
       }
     })
 
+    // 鼠标移除时的展现
     this.mouseout(function () {
       const oCanvasArr = document.getElementsByTagName("canvas")
 
@@ -31,6 +39,7 @@ export default class LinkNode extends TextNode {
       }
     })
 
+    // 注册点击事件
     this.click(function () {
       if (!this.isStopLinkNodeClick) {
         "_blank" === this.target
@@ -42,6 +51,7 @@ export default class LinkNode extends TextNode {
     })
   }
 
+  // 绘制入口
   paint(ctx) {
     ctx.beginPath()
     ctx.font = this.font

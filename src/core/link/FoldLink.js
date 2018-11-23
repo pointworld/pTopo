@@ -5,9 +5,11 @@ export default class FoldLink extends Link {
   constructor(nodeA, nodeZ, text) {
     super(nodeA, nodeZ, text)
 
+    // 折线的方向：horizontal: 水平，vertical: 垂直
     this.direction = "horizontal"
   }
 
+  // 获取折线开始位置
   getStartPosition() {
     const startPos = {
       x: this.nodeA.cx,
@@ -28,6 +30,7 @@ export default class FoldLink extends Link {
     return startPos
   }
 
+  // 获取折线结束位置
   getEndPosition() {
     const endPos = {
       x: this.nodeZ.cx,
@@ -48,6 +51,7 @@ export default class FoldLink extends Link {
     return endPos
   }
 
+  // 获取折线路径
   getPath(a) {
     const pathObj = []
     const startPos = this.getStartPosition()
@@ -79,6 +83,7 @@ export default class FoldLink extends Link {
     return pathObj
   }
 
+  // 绘制折线名称
   paintText(ctx, b) {
     if (
       this.text

@@ -1,10 +1,14 @@
 export default class EventEmitter {
   constructor(type) {
+    // 事件名
     this.name = type
+    // 事件映射
     this.messageMap = {}
+    // 事件数量
     this.messageCount = 0
   }
 
+  // 订阅：注册一个事件
   subscribe(type, listener) {
     const handler = this.messageMap[type]
 
@@ -16,6 +20,7 @@ export default class EventEmitter {
     this.messageCount++
   }
 
+  // 取消订阅
   unsubscribe(type) {
     const handler = this.messageMap[type]
 
@@ -28,6 +33,7 @@ export default class EventEmitter {
     }
   }
 
+  // 发布：触发事件
   publish(type, eObj, sign) {
     const handler = this.messageMap[type]
 

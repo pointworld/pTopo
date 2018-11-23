@@ -256,6 +256,7 @@ export default class Stage {
     }
   }
 
+  // 初始化事件
   initEvent(ele) {
     const self = this
     let timer = null
@@ -459,6 +460,7 @@ export default class Stage {
     }, 3e3)
   }
 
+  // 给场景分配事件
   dispatchEventToScenes(eName, eObj) {
     this.frames && (this.needRepaint = true)
 
@@ -492,6 +494,7 @@ export default class Stage {
     })
   }
 
+  // 添加场景到舞台
   add(scene) {
     for (let i = 0, len = this.childs.length; i < len; i++) {
       if (this.childs[i] === scene) return
@@ -501,6 +504,7 @@ export default class Stage {
     this.childs.push(scene)
   }
 
+  // 从舞台中移除某个场景
   remove(scene) {
     if (!scene) {
       throw new Error("the argument of Stage.remove cannot be null!")
@@ -516,6 +520,7 @@ export default class Stage {
     return this
   }
 
+  // 清除所有场景
   clear() {
     this.childs = []
   }

@@ -5,6 +5,7 @@ export default class CurveLink extends Link {
     super(nodeA, nodeZ, text)
   }
 
+  // 绘制曲线路径
   paintPath(ctx, pathArr) {
     if (this.nodeA === this.nodeZ) return void this.paintLoop(ctx)
 

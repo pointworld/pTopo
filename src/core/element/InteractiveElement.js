@@ -17,6 +17,7 @@ export default class InteractiveElement extends DisplayElement {
     this.serializedProperties = this.serializedProperties.concat(keyArr)
   }
 
+  // 绘制被选中的元素
   paintSelected(ctx) {
     if (this.showSelected) {
       ctx.save()
@@ -31,10 +32,12 @@ export default class InteractiveElement extends DisplayElement {
     }
   }
 
+  // 绘制鼠标悬浮在元素上时元素的样式
   paintMouseover(ctx) {
     return this.paintSelected(ctx)
   }
 
+  // 判断某个点是否在元素内
   isInBound(x, y) {
     return x > this.x
       && x < this.x + this.width * Math.abs(this.scaleX)
@@ -42,6 +45,7 @@ export default class InteractiveElement extends DisplayElement {
       && y < this.y + this.height * Math.abs(this.scaleY)
   }
 
+  // 添加事件监听器
   addEventListener(type, fn) {
     const self = this
     const listener = function (args) {
@@ -55,6 +59,7 @@ export default class InteractiveElement extends DisplayElement {
     return this
   }
 
+  // 分配事件
   dispatchEvent(type, e) {
     if (this.eventEmitter) {
       this.eventEmitter.publish(type, e)
@@ -66,6 +71,7 @@ export default class InteractiveElement extends DisplayElement {
     }
   }
 
+  // 被选中时的处理器
   selectedHandler() {
     this.selected = true
 
@@ -75,11 +81,13 @@ export default class InteractiveElement extends DisplayElement {
     }
   }
 
+  // 不被选中时的处理器
   unselectedHandler() {
     this.selected = false
     this.selectedLocation = null
   }
 
+  // 元素被点击时的处理器
   clickHandler(e) {
     this.dispatchEvent('click', e)
   }
@@ -118,10 +126,12 @@ export default class InteractiveElement extends DisplayElement {
     this.dispatchEvent("mousedrag", e)
   }
 
+  // 移除当前元素上指定的事件监听器
   removeEventListener(type) {
     this.eventEmitter.unsubscribe(type)
   }
 
+  // 移除当前元素上的所有监听器
   removeAllEventListener() {
     this.eventEmitter = new EventEmitter
   }

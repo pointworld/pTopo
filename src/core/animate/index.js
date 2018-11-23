@@ -33,12 +33,14 @@ function bbb(fn, interval) {
   }
 }
 
+// 是否停止所有动画
 let isStopAll = false
 
 export default class Animate {
   constructor() {
   }
 
+  // 匀速效果
   stepByStep(node, attrs, time, isNeedCycle, isNeedReverseCycle) {
     const interval = 1000 / 24
     const h = {}
@@ -93,6 +95,7 @@ export default class Animate {
     }, interval)
   }
 
+  // 旋转效果
   rotate(a, b) {
     let timer = null
     const obj = {}
@@ -128,6 +131,7 @@ export default class Animate {
     return obj
   }
 
+  // 缩放效果
   scale(a, b) {
     let scale = b.scale || 1
       , f = .06
@@ -158,6 +162,7 @@ export default class Animate {
     return obj
   }
 
+  // 移动
   move(a, b) {
     let position = b.position
       , easing = b.easing || .2
@@ -281,6 +286,7 @@ export default class Animate {
     return obj
   }
 
+  // 将一个节点切成两片
   dividedTwoPiece(b, c) {
     const self = this
     let context = c.context
@@ -365,6 +371,7 @@ export default class Animate {
     return obj
   }
 
+  // 重力效果
   gravity(a, b) {
     let context = b.context
       , gravity = b.gravity || .1
@@ -409,10 +416,12 @@ export default class Animate {
     return obj
   }
 
+  // 开始所有动画
   startAll() {
     isStopAll = false
   }
 
+  // 停止所有动画
   stopAll() {
     isStopAll = true
   }

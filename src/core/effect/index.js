@@ -34,6 +34,7 @@ function b(fn, interval) {
 export default class Effect {
   constructor() {}
 
+  // 喷泉效果
   spring(obj) {
     !obj && (obj = {})
 
@@ -107,6 +108,7 @@ export default class Effect {
     }
   }
 
+  // 重力效果
   gravity(a, c) {
     c = c || {}
 

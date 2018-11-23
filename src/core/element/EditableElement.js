@@ -1,6 +1,7 @@
 import InteractiveElement from './InteractiveElement'
 import {SceneMode} from "../../shared/constants"
 
+// 位置数组
 const posArr = ["Top_Left", "Top_Center", "Top_Right", "Middle_Left", "Middle_Right", "Bottom_Left", "Bottom_Center", "Bottom_Top", "Bottom_Right"]
 
 export default class EditableElement extends InteractiveElement {
@@ -11,6 +12,7 @@ export default class EditableElement extends InteractiveElement {
     this.selectedPoint = null
   }
 
+  // 根据位置描述符获取被控制元素相关位置信息
   getCtrlPosition(posDesc) {
     const dx = 5
     const dy = 5
@@ -24,6 +26,7 @@ export default class EditableElement extends InteractiveElement {
     }
   }
 
+  // 元素被选中时的处理函数
   selectedHandler(b) {
     super.selectedHandler.apply(this, arguments)
 
@@ -36,6 +39,7 @@ export default class EditableElement extends InteractiveElement {
     && (this.editAble = true)
   }
 
+  // 元素未被选中时的处理函数
   unselectedHandler() {
     super.unselectedHandler.apply(this, arguments)
 
@@ -43,6 +47,7 @@ export default class EditableElement extends InteractiveElement {
     this.editAble = false
   }
 
+  // 绘制处于控制状态下的元素
   paintCtrl(ctx) {
     if (this.editAble) {
       ctx.save()
@@ -75,6 +80,7 @@ export default class EditableElement extends InteractiveElement {
     }
   }
 
+  // 判断某个点是否在元素内
   isInBound(x, y) {
     this.selectedPoint = null
 
@@ -98,6 +104,7 @@ export default class EditableElement extends InteractiveElement {
     return super.isInBound.apply(this, arguments)
   }
 
+  // 鼠标拖拽处理器
   mousedragHandler(e) {
     if (!this.selectedPoint) {
       let x = this.selectedLocation.x + e.dx

@@ -30,6 +30,7 @@ export default class DisplayElement extends Element {
     this.serializedProperties = this.serializedProperties.concat(keyArr)
   }
 
+  // 绘制当前元素
   paint(ctx) {
     ctx.beginPath()
     ctx.fillStyle = 'rgba(' + this.fillColor + ',' + this.alpha + ')'
@@ -39,6 +40,7 @@ export default class DisplayElement extends Element {
     ctx.closePath()
   }
 
+  // 获取当前元素左上角位置
   getLocation() {
     return {
       x: this.x,
@@ -46,6 +48,7 @@ export default class DisplayElement extends Element {
     }
   }
 
+  // 设置当前元素位置
   setLocation(x, y) {
     this.x = x
     this.y = y
@@ -53,6 +56,7 @@ export default class DisplayElement extends Element {
     return this
   }
 
+  // 获取当前元素中心点位置
   getCenterLocation() {
     return {
       x: this.x + this.width / 2,
@@ -60,6 +64,7 @@ export default class DisplayElement extends Element {
     }
   }
 
+  // 设置当前元素中心点位置
   setCenterLocation(x, y) {
     this.x = x - this.width / 2
     this.y = y - this.height / 2
@@ -67,6 +72,7 @@ export default class DisplayElement extends Element {
     return this
   }
 
+  // 获取当前元素大小
   getSize() {
     return {
       width: this.width,
@@ -74,6 +80,7 @@ export default class DisplayElement extends Element {
     }
   }
 
+  // 设置当前元素大小
   setSize(w, h) {
     this.width = w
     this.height = h
@@ -81,6 +88,7 @@ export default class DisplayElement extends Element {
     return this
   }
 
+  // 获取当前元素的边界
   getBound() {
     return {
       left: this.x,
@@ -92,6 +100,7 @@ export default class DisplayElement extends Element {
     }
   }
 
+  // 设置当前元素的边界
   setBound(x, y, w, h) {
     this.setLocation(x, y)
     this.setSize(w, h)
@@ -99,6 +108,7 @@ export default class DisplayElement extends Element {
     return this
   }
 
+  // 获取当前元素可展示的边界
   getDisplayBound() {
     return {
       left: this.x,
@@ -108,6 +118,7 @@ export default class DisplayElement extends Element {
     }
   }
 
+  // 设置当前元素可展示的大小
   getDisplaySize() {
     return {
       width: this.width * this.scaleX,
@@ -115,6 +126,7 @@ export default class DisplayElement extends Element {
     }
   }
 
+  // 根据位置描述符获取元素上对应的位置坐标
   getPosition(posDesc) {
     let x
     let y
@@ -162,18 +174,22 @@ export default class DisplayElement extends Element {
     return {x, y}
   }
 
+  // 获取元素中心点的横坐标
   get cx() {
     return this.x + this.width / 2
   }
 
+  // 设置元素中心点的横坐标
   set cx(cx) {
     this.x = cx - this.width / 2
   }
 
+  // 获取元素中心点的纵坐标
   get cy() {
     return this.y + this.height / 2
   }
 
+  // 设置元素中心点的纵坐标
   set cy(cy) {
     this.y = cy - this.height / 2
   }

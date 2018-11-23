@@ -32,6 +32,7 @@ function _Animate1_Node(frameImages, interv, c) {
 }
 _Animate1_Node.prototype = new Node
 
+// 参数：图片地址，行，列，时间间隔，行偏移量
 function _Animate2_Node(image, row, col, interv, rOffset) {
   this.setImage(image)
   this.frameIndex = 0

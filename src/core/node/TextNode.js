@@ -8,6 +8,7 @@ export default class TextNode extends Node {
     this.elementType = "TextNode"
   }
 
+  // 绘制入口
   paint(ctx) {
     ctx.beginPath()
     ctx.font = this.font

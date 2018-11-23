@@ -7,32 +7,51 @@ export default class Link extends InteractiveElement {
   constructor(nodeA, nodeZ, text) {
     super(nodeA, nodeZ, text)
 
+    // 元素类型
     this.elementType = "link"
+    // 元素 z-index 值
     this.zIndex = zIndex_Link
 
     if (arguments.length) {
+      // 元素名
       this.text = text
+      // 连线起始节点
       this.nodeA = nodeA
       this.nodeA && !this.nodeA.inLinks && (this.nodeA.inLinks = [])
       this.nodeA && !this.nodeA.outLinks && (this.nodeA.outLinks = [])
       this.nodeA && this.nodeA.outLinks.push(this)
+      // 连线终止节点
       this.nodeZ = nodeZ
       this.nodeZ && !this.nodeZ.inLinks && (this.nodeZ.inLinks = [])
       this.nodeZ && !this.nodeZ.outLinks && (this.nodeZ.outLinks = [])
       this.nodeZ && this.nodeZ.inLinks.push(this)
+      // 计算节点索引
       this.caculateIndex()
+      // 字体
       this.font = "12px Consolas"
+      // 字体颜色
       this.fontColor = "255,255,255"
+      // 线宽
       this.lineWidth = 2
+      // 连结合处样式
       this.lineJoin = "miter"
+      // 是否可变换
       this.transformAble = false
+      // 线簇偏移量
       this.bundleOffset = 20
+      // 线与线之间的间距
       this.bundleGap = 12
+      // 文本横向偏移量
       this.textOffsetX = 0
+      // 文本纵向偏移量
       this.textOffsetY = 0
+      // 箭头半径
       this.arrowsRadius = null
+      // 箭头偏移量
       this.arrowsOffset = 0
+      // 虚线模式
       this.dashedPattern = null
+      // 线的路径
       this.path = []
 
       const keysArr = "text,font,fontColor,lineWidth,lineJoin".split(",")
@@ -40,11 +59,13 @@ export default class Link extends InteractiveElement {
     }
   }
 
+  // 计算节点索引
   caculateIndex() {
     const len = getSharedLinksLen(this.nodeA, this.nodeZ)
     len && (this.nodeIndex = len - 1)
   }
 
+  // 节点移除处理器
   removeHandler() {
     const self = this
 
@@ -67,10 +88,12 @@ export default class Link extends InteractiveElement {
     })
   }
 
+  // 获取连线的起始位置
   getStartPosition() {
     return {x: this.nodeA.cx, y: this.nodeA.cy}
   }
 
+  // 获取连线的终止位置
   getEndPosition() {
     let point
 
@@ -84,6 +107,7 @@ export default class Link extends InteractiveElement {
     return point
   }
 
+  // 获取连线的路径
   getPath() {
     const pathArr = []
     const startPos = this.getStartPosition()
@@ -125,6 +149,7 @@ export default class Link extends InteractiveElement {
     return pathArr
   }
 
+  // 绘制连线路径
   paintPath(ctx, pathArr) {
     if (this.nodeA === this.nodeZ) return void this.paintLoop(ctx)
 
@@ -154,6 +179,7 @@ export default class Link extends InteractiveElement {
     }
   }
 
+  // 绘制环行线
   paintLoop(ctx) {
     ctx.beginPath()
 
@@ -164,6 +190,7 @@ export default class Link extends InteractiveElement {
     ctx.closePath()
   }
 
+  // 绘制箭头
   paintArrow(ctx, p1, p2) {
     const e = this.arrowsOffset
     const f = this.arrowsRadius / 2
@@ -192,6 +219,7 @@ export default class Link extends InteractiveElement {
     ctx.closePath()
   }
 
+  // 绘制入口
   paint(ctx) {
     if (this.nodeA && this.nodeZ) {
       const path = this.getPath(this.nodeIndex)
@@ -204,6 +232,7 @@ export default class Link extends InteractiveElement {
     }
   }
 
+  // 绘制文本
   paintText(ctx, path) {
     let c = path[0]
     let d = path[path.length - 1]
@@ -247,6 +276,7 @@ export default class Link extends InteractiveElement {
     }
   }
 
+  // 绘制线条被选中时的状态
   paintSelected(ctx) {
     ctx.shadowBlur = 10
     ctx.shadowColor = "rgba(0,0,0,1)"
@@ -254,6 +284,7 @@ export default class Link extends InteractiveElement {
     ctx.shadowOffsetY = 0
   }
 
+  // 判断点是否在连线上
   isInBound(x, y) {
     if (this.nodeA === this.nodeZ) {
       const d = this.bundleGap * (this.nodeIndex + 1) / 2
