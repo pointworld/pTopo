@@ -5,11 +5,13 @@ import {version} from '../../../package.json'
 
 export default class Stage {
   constructor(canvas) {
+    // 鹰眼的实现
     function eagleEye(stage) {
       return {
         hgap: 16,
         visible: false,
         exportCanvas: document.createElement("canvas"),
+        // 获取鹰眼图像
         getImage(width, height) {
           const boundary = stage.getBound()
           let scaleWidth = 1
@@ -60,13 +62,16 @@ export default class Stage {
           }
         },
         canvas: document.createElement("canvas"),
+        // 更新鹰眼图像的数据
         update() {
           this.eagleImageDatas = this.getData(stage)
         },
+        // 设置鹰眼区域的大小
         setSize(w, h) {
           this.width = this.canvas.width = w
           this.height = this.canvas.height = h
         },
+        // 获取鹰眼图像的数据
         getData(w, h) {
           const ctx = this.canvas.getContext("2d")
 
@@ -160,6 +165,7 @@ export default class Stage {
 
           return null
         },
+        // 将获取的鹰眼图像数据绘制到一个创建好的 canvas 上
         paint() {
           if (this.eagleImageDatas) {
             const ctx = stage.graphics
@@ -203,6 +209,7 @@ export default class Stage {
             this.eagleImageDatas = this.getData(stage)
           }
         },
+        // 事件处理器
         eventHandler(eName, eObj, stage) {
           let eX = eObj.x
           let eY = eObj.y
@@ -550,6 +557,7 @@ export default class Stage {
     return this
   }
 
+  // 保存图片信息（即导出当前 canvas 到一个新的页面）
   saveImageInfo(w, h) {
     const dataUrl = this.eagleEye.getImage(w, h)
     const newWindow = window.open("about:blank")
@@ -559,6 +567,7 @@ export default class Stage {
     return this
   }
 
+  // 将当前 canvas 保存为本地图片
   saveAsLocalImage(w, h) {
     const dataUrl = this.eagleEye.getImage(w, h)
 
@@ -594,36 +603,42 @@ export default class Stage {
     }
   }
 
+  // 缩放当前场景
   zoom(scale) {
     this.childs.forEach(function (scene) {
       scene.visible && scene.zoom(scale)
     })
   }
 
+  // 放大当前场景
   zoomOut(scale) {
     this.childs.forEach(function (scene) {
       scene.visible && scene.zoomOut(scale)
     })
   }
 
+  // 缩小当前场景
   zoomIn(scale) {
     this.childs.forEach(function (scene) {
       scene.visible && scene.zoomIn(scale)
     })
   }
 
+  // 重置当前场景的缩放比
   zoomReset() {
     this.childs.forEach(function (scene) {
       scene.visible && scene.zoomReset()
     })
   }
 
+  // 居中和缩放当前场景
   centerAndZoom() {
     this.childs.forEach(function (scene) {
       scene.visible && scene.centerAndZoom()
     })
   }
 
+  // 设置场景偏移量到舞台中心点
   setCenter(x, y) {
     this.childs.forEach(function (scene) {
       let translateX = x - this.canvas.width / 2
@@ -634,6 +649,7 @@ export default class Stage {
     })
   }
 
+  // 获取舞台中所有场景元素的边界
   getBound() {
     const allSceneBoundary = {
       left: Number.MAX_VALUE,
@@ -672,6 +688,7 @@ export default class Stage {
     return allSceneBoundary
   }
 
+  // 序列化舞台，并返回一个 json 字符串
   toJson() {
     let self = this
     let jsonStr = '{"version":"' + version + '",'
@@ -693,6 +710,7 @@ export default class Stage {
     return jsonStr
   }
 
+  // 搜索并返回舞台中找到的场景
   find(cbOrCond) {
     let eNameArr1 = "click,mousedown,mouseup,mouseover,mouseout,mousedrag,keydown,keyup".split(",")
 
@@ -856,22 +874,27 @@ export default class Stage {
     return getFinalFilteredScenes(filteredScenes)
   }
 
+  // 获取舞台宽度
   get width() {
     return this.canvas.width
   }
 
+  // 获取舞台高度
   get height() {
     return this.canvas.height
   }
 
+  // 设置鼠标显示样式
   set cursor(shape) {
     this.canvas.style.cursor = shape
   }
 
+  // 返回鼠标显示样式
   get cursor() {
     return this.canvas.style.cursor
   }
 
+  // 设置场景模式
   set mode(m) {
     this.childs.forEach(function (scene) {
       scene.mode = m

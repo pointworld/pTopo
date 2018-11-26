@@ -7,6 +7,7 @@ import {MouseCursor} from "../../shared/constants"
 
 const canvas = document.createElement("canvas")
 
+// 将舞台数据序列化为 json 字符串
 export function toJson(stage) {
   const scenePropertiesArr = "backgroundColor,visible,mode,rotate,alpha,scaleX,scaleY,shadow,translateX,translateY,areaSelect,paintAll".split(",")
   const nodePropertiesArr = "text,elementType,x,y,width,height,visible,alpha,rotate,scaleX,scaleY,fillColor,shadow,transformAble,zIndex,dragable,selected,showSelected,font,fontColor,textPosition,textOffsetX,textOffsetY".split(",")
@@ -40,6 +41,7 @@ export function toJson(stage) {
 
   return stageJson
 }
+// 根据 json 数据加载当前舞台
 export function loadStageFromJson(json, canvas) {
   const obj = JSON.parse(json)
   const stage = new Stage(canvas)
@@ -85,6 +87,7 @@ export function loadStageFromJson(json, canvas) {
 }
 
 
+// 节点闪烁处理
 export function nodeFlash(node, isChangeColor, isFlash, oriColor, changeColor) {
   node.nodeOriginColor = oriColor
   node.alarm = isChangeColor ? "true" : null
@@ -132,6 +135,7 @@ export function smallNodeFlash(node, isChangeColor, isFlash, oriColor, changeCol
   }
 }
 
+// 通过类型（如 node, link）获取元素
 export function findEleByType(type) {
   return flag.curScene.childs.filter(function (child) {
     return (child.elementType === type)
@@ -208,6 +212,7 @@ export function moveElePosByContainerBorder(eleObj, isOpen, callback) {
 
   callback && callback()
 }
+// 通过元素 id 获取元素
 export function findEleById(id) {
   const idTypeName = id.indexOf('front') >= 0
     ? '_id'
@@ -217,6 +222,7 @@ export function findEleById(id) {
     return (child[idTypeName] === id)
   })[0]
 }
+// 鼠标光标的样式
 export function setImageUrl(url) {
   flag.imageUrl = url
 
@@ -228,6 +234,7 @@ export function setImageUrl(url) {
     MouseCursor.closed_hand = "url(" + url + "closedhand.cur) 8 8, default"
   }
 }
+// 获取图片告警
 export function getImageAlarm(imgEle, b, tarColor, oriColor) {
   !b && (b = 255)
 

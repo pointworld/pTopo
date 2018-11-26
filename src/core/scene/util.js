@@ -1,5 +1,6 @@
 import Link from "../link/Link"
 
+// 获取当前场景中所有元素的边界
 export function getElementsBound(eleArr) {
   let ebObj = {
     left: Number.MAX_VALUE,

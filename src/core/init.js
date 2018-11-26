@@ -1,3 +1,4 @@
+// 获取一个字符串中的中文字符数
 String.prototype.getChineseNum = function () {
   let len = 0
 
@@ -12,6 +13,7 @@ String.prototype.getChineseNum = function () {
 
   return len
 }
+// 根据值或索引删除数组中的一个元素
 Array.prototype.del = function (indexOrValue) {
   if ("number" !== typeof indexOrValue) {
     for (let i = 0; i < this.length; i++) {
@@ -45,6 +47,7 @@ Array.prototype.unique = function () {
   return res
 }
 
+// 绘制圆角矩形
 CanvasRenderingContext2D.prototype.PTopoRoundRect = function (x, y, w, h, borderRadius, borderDashed) {
   !borderRadius && (borderRadius = 5)
 
@@ -80,6 +83,7 @@ CanvasRenderingContext2D.prototype.PTopoRoundRect = function (x, y, w, h, border
     this.closePath()
   }
 }
+// 绘制曲线
 CanvasRenderingContext2D.prototype.PTopoDashedLineTo = function (x1, y1, x2, y2, dashedLineSpacing) {
   !dashedLineSpacing && (dashedLineSpacing = 5)
 
@@ -108,6 +112,7 @@ CanvasRenderingContext2D.prototype.PTopoDashedLineTo = function (x1, y1, x2, y2,
 
   this.stroke()
 }
+
 CanvasRenderingContext2D.prototype.PTopoDrawPointPath = function (x1, y1, x2, y2, strokeStyle, PointPathColor) {
   const animSpeed = (new Date()) / 10
 

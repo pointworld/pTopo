@@ -7,7 +7,7 @@ import Node from '../node/Node'
 import Link from '../link/Link'
 import {MouseCursor, SceneMode} from '../../shared/constants'
 
-// 绘制矩形
+// 返回一个矩形的绘制函数
 function DrawRect(x, y, w, h) {
   return function (ctx) {
     ctx.beginPath()
@@ -174,7 +174,7 @@ export default class Scene extends Element {
     return displayedNodeArr
   }
 
-  // 绘制节点
+  // 绘制元素
   paintChilds(ctx) {
     for (let i = 0, len = this.zIndexArray.length; i < len; i++) {
       const zIndex = this.zIndexArray[i]
@@ -253,6 +253,7 @@ export default class Scene extends Element {
     }
   }
 
+  // 判断元素在当前场景的可视区域内是否可见
   isVisiable(ele) {
     if (!ele.visible) return false
 
@@ -407,7 +408,6 @@ export default class Scene extends Element {
     }
   }
 
-  //
   toSceneEvent(e) {
     const eObj = clone(e)
 
@@ -802,6 +802,7 @@ export default class Scene extends Element {
     this.scaleY = 1
   }
 
+  // 获取舞台的边界
   getBound() {
     return {
       left: 0,
@@ -813,10 +814,12 @@ export default class Scene extends Element {
     }
   }
 
+  // 获取场景内所有元素的边界
   getElementsBound() {
     return getElementsBound(this.childs)
   }
 
+  // 设置场景的偏移量为舞台中心点
   translateToCenter(a) {
     const bObj = this.getElementsBound()
 
@@ -832,7 +835,7 @@ export default class Scene extends Element {
     this.translateY = y
   }
 
-  // 设置场景中心点
+  // 设置舞台中心点
   setCenter(x, y) {
     let translateX = x - this.stage.canvas.width / 2
     let translateY = y - this.stage.canvas.height / 2
@@ -881,7 +884,7 @@ export default class Scene extends Element {
     this.zoom(a, b)
   }
 
-  // 获取场景中心点坐标
+  // 获取舞台中心点坐标
   getCenterLocation() {
     return {
       x: this.stage.canvas.width / 2,

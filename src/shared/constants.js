@@ -1,12 +1,17 @@
+// container 的 z_index 值
 export const zIndex_Container = 1
+// link 的 z_index 值
 export const zIndex_Link = 2
+// node 的 z_index 值
 export const zIndex_Node = 3
+// 场景模式
 export const SceneMode = {
   normal: "normal",
   drag: "drag",
   edit: "edit",
   select: "select",
 }
+// 鼠标光标的样式
 export const MouseCursor = {
   normal: "default",
   pointer: "pointer",

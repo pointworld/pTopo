@@ -1,3 +1,4 @@
+// 获取一个点被旋转后的坐标
 export function rotatePoint(x1, y1, x2, y2, rad) {
   const w = x2 - x1
   const h = y2 - y1
@@ -9,6 +10,8 @@ export function rotatePoint(x1, y1, x2, y2, rad) {
     y: y1 + Math.sin(tarRad) * l,
   }
 }
+
+// 获取一个点被旋转多次后的得到的多个坐标组成的数组
 export function rotatePoints(p1, pointsArr, rad) {
   const tarCoordArr = []
 
@@ -27,6 +30,7 @@ export function rotatePoints(p1, pointsArr, rad) {
   return tarCoordArr
 }
 
+// 获取两个点之间的距离
 export function getDistance(p1, p2, c, d) {
   let w
   let h
@@ -42,6 +46,7 @@ export function getDistance(p1, p2, c, d) {
 
   return Math.sqrt(w * w + h * h)
 }
+// 判断一个点是否在一条线段上
 export function isPointInLine(p1, p2, p3) {
 
   const d1 = getDistance(p2, p3)
@@ -51,6 +56,7 @@ export function isPointInLine(p1, p2, p3) {
   return Math.abs(d2 + d3 - d1) <= .5
 }
 
+// 拷贝事件对象
 export function cloneEvent(e) {
   const eObj = {}
 
@@ -62,6 +68,7 @@ export function cloneEvent(e) {
 
   return eObj
 }
+// 获取鼠标的坐标位置信息，并重新计算事件对象的 pageX 值和 pageY 值
 export function mouseCoords(e) {
   const eObj = cloneEvent(e)
 
@@ -72,16 +79,19 @@ export function mouseCoords(e) {
 
   return eObj
 }
+// 获取事件被触发的位置信息
 export function getEventPosition(e) {
   return mouseCoords(e)
 }
 
+// 判断一个点是否在一个矩形框内
 export function isPointInRect(point, rect) {
   return point.x > rect.x
     && point.x < rect.x + rect.width
     && point.y > rect.y
     && point.y < rect.y + rect.height
 }
+// 判断两个矩形是否重叠
 export function isRectOverlapRect(rect1, rect2) {
   function sugar(rect1, rect2) {
     const rect = rect1
@@ -113,6 +123,7 @@ export function isRectOverlapRect(rect1, rect2) {
     || sugar(rect2, rect1)
 }
 
+// 随机生成一个 rgb 颜色值
 export function randomColor() {
   return Math.floor(255 * Math.random())
     + ","
@@ -121,6 +132,7 @@ export function randomColor() {
     + Math.floor(255 * Math.random())
 }
 
+// 根据一个键数组，获取一个对象中所有与该数组对应的键和该键对应的值组成的一个字符串
 export function getProperties(obj, keys) {
   let propertiesJson = ""
 
@@ -139,6 +151,7 @@ export function getProperties(obj, keys) {
   return propertiesJson
 }
 
+// 获取一条线段的函数
 export function lineFn(x1, y1, x2, y2) {
   let k = (y2 - y1) / (x2 - x1)
   let b = y1 - x1 * k
@@ -158,6 +171,7 @@ export function lineFn(x1, y1, x2, y2) {
   return sugar
 }
 
+// 判断一个值是否在某一个区间内
 export function inRange(testVal, val1, val2) {
   const d1 = Math.abs(val1 - val2)
   const d2 = Math.abs(val1 - testVal)
@@ -166,10 +180,13 @@ export function inRange(testVal, val1, val2) {
 
   return 1e-6 > sign ? !0 : !1
 }
+// 判断一个点是否在一条线段上
 export function isPointInLineSeg(x, y, lineFn) {
   return inRange(x, lineFn.x1, lineFn.x2)
     && inRange(y, lineFn.y1, lineFn.y2)
 }
+
+// 获取两条线段的相交点
 export function intersection(lineObj1, lineObj2) {
   let x
   let y
@@ -227,10 +244,12 @@ export function intersection(lineObj1, lineObj2) {
   // }
 }
 
+// 创建一个元素的唯一 id
 export function createId() {
   return "front" + (new Date).getTime() + Math.round(Math.random() * 1000000)
 }
 
+// 深拷贝一个对象
 export function copy(jsonObj) {
   return JSON.parse(JSON.stringify(jsonObj))
 }
@@ -246,6 +265,7 @@ export function getUrlParam(key) {
   return null
 }
 
+// 获取旋转角度
 export function getRotateAng(nodeA, nodeZ) {
   const x = nodeA.x - nodeZ.x
   const y = nodeA.y - nodeZ.y
@@ -253,6 +273,7 @@ export function getRotateAng(nodeA, nodeZ) {
   return Math.atan(y / x)
 }
 
+// 浅拷贝一个对象
 export function clone(jsonObj) {
   const copyJsonObj = {}
 
@@ -310,6 +331,7 @@ export function findAllNextNodesAndLinks(id, linksArr, saveObj) {
   return _saveObj
 }
 
+// 从数组中移除目标元素
 export function removeFromArray(arr, tarEle) {
   for (let i = 0; i < arr.length; i++) {
     const curEle = arr[i]
@@ -324,6 +346,7 @@ export function removeFromArray(arr, tarEle) {
   return arr
 }
 
+// 获取一个元素偏移后的左上角坐标
 export function getOffsetPosition(ele) {
   if (!ele) {
     return {
